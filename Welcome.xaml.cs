@@ -55,13 +55,7 @@ namespace HoppoPlugin
                 }
                 else
                 {
-                    MessageBoxResult m = MessageBox.Show("一直出现同一错误？点击确定前往百度网盘下载必要文件，并且解压至KCV目录，即可正常使用HoppoPlugin。\n确认么？", "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                    if (m == MessageBoxResult.Yes)
-                    {
-                        Process.Start("http://pan.baidu.com/s/1AkGkY;");
-                        Btn_Finish.Visibility = Visibility.Visible;
-                        retryCount = 0;
-                    }
+                    retryCount = 0;
                 }
             }
 
