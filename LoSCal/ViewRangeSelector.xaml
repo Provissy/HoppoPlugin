@@ -1,0 +1,54 @@
+﻿<UserControl x:Class="HoppoPlugin.LoSCal.ViewRangeSelector"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <StackPanel Margin="0,5">
+        <RadioButton IsChecked="{Binding ViewRangeType1}" Margin="0,5">
+            <TextBlock Style="{DynamicResource DefaultTextStyleKey}" LineHeight="16">
+                <Run Text="艦娘と装備の索敵値の単純な合計" Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type RadioButton}}, Path=Foreground}" />
+                <LineBreak />
+                <Run Text="KanColleViewer での従来の計算方法" />
+            </TextBlock>
+        </RadioButton>
+        
+        <RadioButton IsChecked="{Binding ViewRangeType2}" Margin="0,5">
+            <TextBlock Style="{DynamicResource DefaultTextStyleKey}" LineHeight="18">
+                <Run Text="2-5式(旧)" Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type RadioButton}}, Path=Foreground}" />
+                <LineBreak />
+                <Run Text="(偵察機 × 2) + (電探) + √(装備込みの艦隊索敵値合計 - 偵察機 - 電探)" />
+                <LineBreak />
+                <Run Text="偵察機" />
+                <Run Text="…" />
+                <Run Text="水上偵察機" ToolTip="零式水上偵察機、零式水上観測機、九八式水上偵察機(夜偵)" />
+                <Run Text="・" />
+                <Run Text="水上爆撃機" ToolTip="瑞雲、瑞雲(六三四空)、試製晴嵐" />
+                <Run Text="・" />
+                <Run Text="艦上偵察機" ToolTip="彩雲、二式艦上偵察機" />
+            </TextBlock>
+        </RadioButton>
+
+        <RadioButton IsChecked="{Binding ViewRangeType3}" Margin="0,5">
+            <TextBlock Style="{DynamicResource DefaultTextStyleKey}" LineHeight="18">
+                <Run Text="2-5式(秋)" Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type RadioButton}}, Path=Foreground}" />
+                <LineBreak />
+                <Run Text="舰爆×1.04 + 舰攻×1.37 + 舰侦×1.66 + 水侦×2.0 + 水爆×1.78" />
+                <LineBreak />
+                <Run Text=" + 小型电探×1.0 + 大型电探×0.99 + 探照灯×0.91" />
+                <LineBreak />
+                <Run Text=" + (Σ√(舰娘裸装索敌值))×1.69 - (司令部等级向上取整为5的倍数)×0.61" />
+                
+            </TextBlock>
+        </RadioButton>
+
+        <RadioButton IsChecked="{Binding ViewRangeType4}" Margin="0,5">
+            <TextBlock Style="{DynamicResource DefaultTextStyleKey}" LineHeight="18">
+                <Run Text="新秋式簡易" Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type RadioButton}}, Path=Foreground}" />
+                <LineBreak />
+                <Run Text="舰爆×0.6 + 舰攻×0.8 + 舰侦×1.0 + 水侦×1.2 + 水爆×1.1" />
+                <LineBreak />
+                <Run Text=" + 电探×0.6 + 探照灯×0.5" />
+                <LineBreak />
+                <Run Text=" + (Σ√(舰娘裸装索敌值)) - 司令部等级×0.4" />
+            </TextBlock>
+        </RadioButton>
+    </StackPanel>
+</UserControl>

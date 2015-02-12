@@ -1,0 +1,89 @@
+﻿<UserControl x:Class="HoppoPlugin.Landscape.LandscapeExtensionButton"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:metro2="clr-namespace:Grabacr07.Desktop.Metro.Controls;assembly=Desktop.Metro"
+             UseLayoutRounding="True"
+             DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    <DockPanel>
+        <ToggleButton x:Name="PopupButton" x:FieldModifier="private" Width="Auto" Height="26">
+            <TextBlock FontSize="14" FontFamily="Segoe UI" Foreground="{DynamicResource ActiveForegroundBrushKey}" VerticalAlignment="Center" Text="LS"/>
+            <ToggleButton.Template>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Border x:Name="ButtonRoot" Background="Transparent">
+                        <ContentPresenter Margin="8,0" />
+                    </Border>
+                    
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" TargetName="ButtonRoot" Value="{DynamicResource ActiveBackgroundBrushKey}"/>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Background" TargetName="ButtonRoot" Value="{DynamicResource AccentBrushKey}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </ToggleButton.Template>
+        </ToggleButton>
+
+        <Popup x:Name="Popup" x:FieldModifier="private"
+               Placement="Bottom" PlacementTarget="{Binding ElementName=PopupButton}" PlacementRectangle="-9,20,0,0"
+               IsOpen="{Binding ElementName=PopupButton, Path=IsChecked}" StaysOpen="False"
+               PopupAnimation="Fade"
+               AllowsTransparency="True">
+            <Border Background="Transparent">
+                <Grid Margin="9">
+                    <Rectangle Stroke="{DynamicResource AccentBrushKey}" StrokeThickness="3">
+                        <Rectangle.Effect>
+                            <BlurEffect Radius="8"/>
+                        </Rectangle.Effect>
+                    </Rectangle>
+                    <Border Background="{DynamicResource ThemeBrushKey}" BorderBrush="{DynamicResource AccentBrushKey}" BorderThickness="1">
+                        <StackPanel Margin="5">
+                            <StackPanel.Resources>
+                                <Style TargetType="metro2:CallMethodButton">
+                                    <Setter Property="Margin" Value="0,2"/>
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="metro2:CallMethodButton">
+                                                <Border x:Name="ButtonRoot" Background="{TemplateBinding Background}">
+                                                    <TextBlock FontSize="13" FontFamily="Segoe UI" Margin="5" Text="{TemplateBinding Content}"/>
+                                                </Border>
+
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter TargetName="ButtonRoot" Property="Background" Value="{DynamicResource ActiveBackgroundBrushKey}"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsPressed" Value="True">
+                                                        <Setter TargetName="ButtonRoot" Property="Background" Value="{DynamicResource AccentBrushKey}"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </StackPanel.Resources>
+
+                            <metro2:CallMethodButton Content="刷新" MethodName="Refresh"/>
+
+                            <Rectangle Height="1" Fill="{DynamicResource InactiveForegroundBrushKey}"/>
+
+                            <metro2:CallMethodButton Content="声音切换" MethodName="SwitchSound"/>
+                            <metro2:CallMethodButton Content="截图" MethodName="PrintScreen"/>
+
+                            <Rectangle Height="1" Fill="{DynamicResource InactiveForegroundBrushKey}"/>
+
+                            <metro2:CallMethodButton Content="代理切换" MethodName="SwitchProxy"/>
+
+                            <Rectangle Height="1" Fill="{DynamicResource InactiveForegroundBrushKey}"/>
+
+                            <metro2:CallMethodButton Content="窗口自适应" MethodName="AdjustWindow"/>
+                            <metro2:CallMethodButton Content="网页自适应" MethodName="AdjustHost"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Border>
+        </Popup>
+               
+    </DockPanel>
+</UserControl>

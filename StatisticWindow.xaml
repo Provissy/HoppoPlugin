@@ -1,0 +1,204 @@
+﻿<metro:MetroWindow x:Class="HoppoPlugin.StatisticWindow"
+				   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+				   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+				   xmlns:s="clr-namespace:System;assembly=mscorlib"
+				   xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+				   xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+				   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+				   xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing"
+				   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+				   xmlns:livet="http://schemas.livet-mvvm.net/2011/wpf"
+				   xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
+				   xmlns:metro2="clr-namespace:Grabacr07.Desktop.Metro.Controls;assembly=Desktop.Metro"
+				   xmlns:properties="clr-namespace:Grabacr07.KanColleViewer.Properties;assembly=KanColleViewer"
+				   xmlns:views="clr-namespace:Grabacr07.KanColleViewer.ViewModels;assembly=KanColleViewer"
+				   xmlns:viewModels="clr-namespace:Grabacr07.KanColleViewer.ViewModels.Catalogs;assembly=KanColleViewer"
+				   xmlns:behaviors="clr-namespace:Grabacr07.KanColleViewer.Views.Behaviors;assembly=KanColleViewer"
+				   xmlns:controls="clr-namespace:Grabacr07.KanColleViewer.Views.Controls;assembly=KanColleViewer"
+				   xmlns:contents="clr-namespace:Grabacr07.KanColleViewer.Views.Contents;assembly=KanColleViewer"
+				   xmlns:catalogs="clr-namespace:Grabacr07.KanColleViewer.Views.Catalogs;assembly=KanColleViewer"
+				   xmlns:contentsVm="clr-namespace:Grabacr07.KanColleViewer.ViewModels.Contents;assembly=KanColleViewer"
+                   xmlns:hp="clr-namespace:HoppoPlugin"
+                   mc:Ignorable="d"
+                   d:DataContext="{d:DesignInstance hp:StatisticWindowViewModel}"
+                   Background="{DynamicResource ThemeBrushKey}"
+				   Foreground="{DynamicResource ActiveForegroundBrushKey}"
+				   SnapsToDevicePixels="True"
+                   IsRestoringWindowPlacement="True"
+				   TextOptions.TextFormattingMode="Display"
+                   Title="StatisticWindow" Height="680" Width="710" ContentRendered="Window_CR" >
+
+    
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Common.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style x:Key="TabHeaderTextStyleKey"
+				   TargetType="{x:Type TextBlock}"
+				   BasedOn="{StaticResource DefaultTextStyleKey}">
+                <Setter Property="Foreground"
+						Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type TabItem}}, Path=Foreground}" />
+                <Setter Property="Margin"
+						Value="12,0" />
+                <Setter Property="FontSize"
+						Value="14" />
+            </Style>
+        </ResourceDictionary>
+
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Border metro:MetroWindow.IsCaptionBar="True" Panel.ZIndex="100">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <controls:AppIcon Width="36" Height="36" Background="Transparent" AnchorVisibility="Collapsed" BandVisibility="Collapsed" />
+                <TextBlock Grid.Column="1" Text="统计数据（Beta）" Style="{DynamicResource CaptionTextStyleKey}" Margin="2,0,8,0" />
+                <metro:SystemButtons Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Top" />
+            </Grid>
+        </Border>
+
+        <TabControl x:Name="MainTabControl" Grid.Row="1" Style="{DynamicResource VerticalTabControlStyleKey}">
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="建造统计"
+							   Style="{StaticResource TabHeaderTextStyleKey}" />
+                </TabItem.Header>
+                <DataGrid x:Name="BuildDataGrid" Margin="10,0" IsReadOnly="True" Background="{DynamicResource ThemeBrushKey}" IsSynchronizedWithCurrentItem="True">
+
+                    <DataGrid.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="Background" Value="{DynamicResource ThemeBrushKey}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource ActiveForegroundBrushKey}"/>
+                        </Style>
+
+                    </DataGrid.CellStyle>
+
+                    <DataGrid.RowStyle>
+                        <Style TargetType="DataGridRow">
+                            <Setter Property="Background" Value="{DynamicResource ThemeBrushKey}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource ActiveForegroundBrushKey}"/>
+                        </Style>
+                    </DataGrid.RowStyle>
+
+                    <DataGrid.RowHeaderStyle>
+                        <Style TargetType="DataGridRowHeader">
+                            <Setter Property="Background" Value="{DynamicResource ThemeBrushKey}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource ActiveForegroundBrushKey}"/>
+                        </Style>
+                    </DataGrid.RowHeaderStyle>
+
+                    <DataGrid.ColumnHeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="Background" Value="{DynamicResource ThemeBrushKey}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource ActiveForegroundBrushKey}"/>
+                        </Style>
+                    </DataGrid.ColumnHeaderStyle>
+
+                </DataGrid>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="开发统计"
+							   Style="{StaticResource TabHeaderTextStyleKey}" />
+                </TabItem.Header>
+                <DataGrid x:Name="DevelopDataGrid" Margin="10,0" IsReadOnly="True" Background="{DynamicResource ThemeBrushKey}" IsSynchronizedWithCurrentItem="True">
+
+                    <DataGrid.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="Background" Value="{DynamicResource ThemeBrushKey}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource ActiveForegroundBrushKey}"/>
+                        </Style>
+
+                    </DataGrid.CellStyle>
+
+                    <DataGrid.RowStyle>
+                        <Style TargetType="DataGridRow">
+                            <Setter Property="Background" Value="{DynamicResource ThemeBrushKey}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource ActiveForegroundBrushKey}"/>
+                        </Style>
+                    </DataGrid.RowStyle>
+
+                    <DataGrid.RowHeaderStyle>
+                        <Style TargetType="DataGridRowHeader">
+                            <Setter Property="Background" Value="{DynamicResource ThemeBrushKey}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource ActiveForegroundBrushKey}"/>
+                        </Style>
+                    </DataGrid.RowHeaderStyle>
+
+                    <DataGrid.ColumnHeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="Background" Value="{DynamicResource ThemeBrushKey}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource ActiveForegroundBrushKey}"/>
+                        </Style>
+                    </DataGrid.ColumnHeaderStyle>
+
+                </DataGrid>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="掉落统计"
+							   Style="{StaticResource TabHeaderTextStyleKey}" />
+                </TabItem.Header>
+                <DataGrid x:Name="DropDataGrid" Margin="10,0" IsReadOnly="True" Background="{DynamicResource ThemeBrushKey}" IsSynchronizedWithCurrentItem="True">
+
+                    <DataGrid.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="Background" Value="{DynamicResource ThemeBrushKey}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource ActiveForegroundBrushKey}"/>
+                        </Style>
+
+                    </DataGrid.CellStyle>
+
+                    <DataGrid.RowStyle>
+                        <Style TargetType="DataGridRow">
+                            <Setter Property="Background" Value="{DynamicResource ThemeBrushKey}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource ActiveForegroundBrushKey}"/>
+                        </Style>
+                    </DataGrid.RowStyle>
+
+                    <DataGrid.RowHeaderStyle>
+                        <Style TargetType="DataGridRowHeader">
+                            <Setter Property="Background" Value="{DynamicResource ThemeBrushKey}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource ActiveForegroundBrushKey}"/>
+                        </Style>
+                    </DataGrid.RowHeaderStyle>
+
+                    <DataGrid.ColumnHeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="Background" Value="{DynamicResource ThemeBrushKey}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource ActiveForegroundBrushKey}"/>
+                        </Style>
+                    </DataGrid.ColumnHeaderStyle>
+
+                </DataGrid>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="资源统计图"
+							   Style="{StaticResource TabHeaderTextStyleKey}" />
+                </TabItem.Header>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="设置"
+							   Style="{StaticResource TabHeaderTextStyleKey}" />
+                </TabItem.Header>
+                <Grid Margin="10,0">
+                    <TextBlock Text="切换标签页即可刷新统计数据" FontSize="18" VerticalAlignment="Top" Margin="0,10,0,-10"/>
+                    <CheckBox Content="记录没有掉落的出击" IsChecked="{Binding CurrentEnableNullDropLogging}" VerticalAlignment="Top" Margin="0,56,0,-50" HorizontalAlignment="Left"/>
+                </Grid>
+            </TabItem>
+
+        </TabControl>
+    </Grid>
+</metro:MetroWindow>

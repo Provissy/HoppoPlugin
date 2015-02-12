@@ -1,0 +1,71 @@
+﻿<metro:MetroWindow x:Class="HoppoPlugin.Welcome"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+			 xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:livet="http://schemas.livet-mvvm.net/2011/wpf"
+			 xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
+			 xmlns:metro2="clr-namespace:Grabacr07.Desktop.Metro.Controls;assembly=Desktop.Metro"
+             xmlns:converters="clr-namespace:Grabacr07.Desktop.Metro.Converters;assembly=Desktop.Metro"
+                   Title="Welcome To HoppoPlugin"
+                   Width="341"
+                   Height="407"
+                   FontSize="12"
+                    ResizeMode="NoResize">
+    <metro:MetroWindow.Resources>
+        <ResourceDictionary>
+            <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
+
+        </ResourceDictionary>
+    </metro:MetroWindow.Resources>
+    <Grid>
+        <Grid.Background>
+            <LinearGradientBrush>
+                <GradientStop Offset="0" Color="Blue"></GradientStop>
+                <GradientStop Offset="0.5" Color="LightBlue"></GradientStop>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <Border metro:MetroWindow.IsCaptionBar="True" Panel.ZIndex="100" Height="35" VerticalAlignment="Top">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <!--<controls:AppIcon Width="36" Height="36" Background="Transparent" AnchorVisibility="Collapsed" BandVisibility="Collapsed" />-->
+                <TextBlock Grid.Column="1" Text="Welcome To HoppoPlugin" Style="{DynamicResource CaptionTextStyleKey}"  Margin="2,0,8,0" Foreground="White" />
+                <metro:SystemButtons Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Top" Foreground="Black"  />
+            </Grid>
+        </Border>
+        <Grid x:Name="MainContent">
+            <CheckBox x:Name="EnableSound" Content="在远征归来或者建造、维修完成时，用声音提醒我" HorizontalAlignment="Left" Margin="10,192,0,0" VerticalAlignment="Top" Foreground="White" IsChecked="{Binding EnableSoundNotify}"/>
+            <CheckBox x:Name="EnableNullDrop" Content="记录掉落时，一并记录未掉落的出击" IsChecked="{Binding EnableNullDropLogging}" HorizontalAlignment="Left" Margin="10,215,0,0" VerticalAlignment="Top" Foreground="White"/>
+
+            <GroupBox x:Name="gb_ThemeCollection" Header="您希望使用何种KanColleViewer主题？" HorizontalAlignment="Left" Margin="10,238,0,0" VerticalAlignment="Top" Height="70" Width="281" FontSize="14" Foreground="White">
+                <Grid>
+                    <RadioButton Content="深色" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsChecked="{Binding IsDarkTheme, Mode=TwoWay}" FontSize="16" Foreground="White"/>
+                    <RadioButton Content="浅色" HorizontalAlignment="Left" Margin="102,10,0,0" VerticalAlignment="Top" IsChecked="{Binding IsLightTheme, Mode=TwoWay}" FontSize="16" Foreground="White"/>
+                </Grid>
+            </GroupBox>
+
+            <metro2:CallMethodButton Content="完成设置" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="197,313,0,0" FontSize="20" Width="128" Click="CallMethodButton_Click"/>
+            <TextBlock HorizontalAlignment="Right" TextWrapping="Wrap" Text="Written by @Provissy , 2015" VerticalAlignment="Bottom" Foreground="White" FontSize="14" Margin="0,0,10,0"/>
+            <CheckBox Content="在托盘显示带有右键菜单的图标" HorizontalAlignment="Left" Margin="10,169,0,0" VerticalAlignment="Top" Foreground="White"/>
+            <TextBlock Margin="0,50,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="22" Foreground="White" TextAlignment="Center"><Run Text="欢迎使用 北方Plugin！"/><LineBreak/><Run Text="ホッポウプラグインへようこそ！"/><LineBreak/><Run/></TextBlock>
+            <TextBlock HorizontalAlignment="Left" Margin="10,134,0,0" TextWrapping="Wrap" Text="完成一些基本设置并继续吧！" VerticalAlignment="Top" Foreground="White" FontSize="14" FontStyle="Italic" FontFamily="Microsoft YaHei"/>
+
+        </Grid>
+
+        <Grid x:Name="LoadingGrid" Visibility="Hidden">
+            <TextBlock x:Name="Tbl_Introdution" Margin="0,88,0,0" Text="正在初始化,请稍后。。。" VerticalAlignment="Top" TextAlignment="Center" FontSize="36" Foreground="White"/>
+            <ProgressBar x:Name="Pgb_Progress" Height="20" Margin="0,147,0,0" VerticalAlignment="Top" Value="{Binding InitializeProgress}" ValueChanged="PgbValueChanged"/>
+            <metro2:CallMethodButton x:Name="Btn_Finish" HorizontalAlignment="Left" Height="43" Margin="149,326,0,0" VerticalAlignment="Top"  Content="完成！点击继续！" FontSize="20" MethodName="FirstTimeSave" Visibility="Hidden"/>
+            <metro2:CallMethodButton x:Name="Btn_Retry" Content="重试" HorizontalAlignment="Left" Margin="10,172,0,0" VerticalAlignment="Top" FontSize="20" Click="Btn_Retry_Click"/>
+        </Grid>
+
+    </Grid>
+
+
+</metro:MetroWindow>
