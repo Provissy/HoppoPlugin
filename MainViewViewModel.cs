@@ -559,7 +559,7 @@ namespace HoppoPlugin
 
         private void kcvCanceling(object o ,System.ComponentModel.CancelEventArgs e)
         {
-            MessageBoxResult mbr = MessageBox.Show("确定要退出KCV么？", "HoppoPlugin提示", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            MessageBoxResult mbr = MessageBox.Show("确定要退出KanColleViewer么？", "HoppoPlugin提示", MessageBoxButton.YesNo, MessageBoxImage.Warning);
             if(mbr == MessageBoxResult.No)
             {
                 e.Cancel = true;
@@ -574,12 +574,8 @@ namespace HoppoPlugin
                     return;
                 MessageBox.Show("清空设置后后将会关闭KanColleViewer！");
                 File.Delete(HoppoPluginSettings.HPSettingsPath);
-                File.Delete(HoppoPluginSettings.UsageRecordPath);
-                Process[] killprocess = Process.GetProcessesByName("KanColleViewer");
-                foreach (System.Diagnostics.Process p in killprocess)
-                {
-                    p.Kill();
-                }
+                //File.Delete(HoppoPluginSettings.UsageRecordPath);
+                (Process.GetProcessesByName("KanColleViewer")[0]).Kill();
             }
             catch(Exception ex)
             {

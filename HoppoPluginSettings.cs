@@ -25,10 +25,10 @@ namespace HoppoPlugin
             "HoppoPluginSettings.xml");
 
         public static readonly string UsageRecordPath = Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-        "grabacr.net",
-        "KanColleViewer",
-        "HoppoPluginUsageRecord");
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            "grabacr.net",
+            "KanColleViewer",
+            "_HoppoPluginUsageRecord");
 
         public static HoppoPluginSettings Current { get; set; }
 
@@ -69,11 +69,7 @@ namespace HoppoPlugin
             }
             this.WriteXml(HPSettingsPath);
             MessageBox.Show("即将关闭KanColleViewer！\n请重新启动KanColleViewer！\n在“Sounds”文件夹内可设置声音文件");
-            Process[] killprocess = Process.GetProcessesByName("KanColleViewer");
-            foreach (System.Diagnostics.Process p in killprocess)
-            {
-                p.Kill();
-            }
+            (Process.GetProcessesByName("KanColleViewer")[0]).Kill();
         }
 
         // Settings detail.
