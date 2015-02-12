@@ -34,12 +34,14 @@ namespace HoppoPlugin
                     if (!Directory.Exists("HoppoPlugin"))
                     {
                         Directory.CreateDirectory("HoppoPlugin");
+                        DirectoryInfo di = new DirectoryInfo("HoppoPlugin");
+                        di.CreateSubdirectory("KanColleCache");
                     }
                     Pgb_Progress.Value += await downloadSoundDLL();
                     Pgb_Progress.Value += await downloadNekoCompareImage();
                     Pgb_Progress.Value += await downloadChartDll1();
                     Pgb_Progress.Value += await downloadChartDll2();
-                    Pgb_Progress.Value += await uploadUsage();
+                    Pgb_Progress.Value += await recordUsage();
                     if (Directory.Exists("Sounds")) { Directory.Delete("Sounds", true); }
                     Directory.CreateDirectory("Sounds");
                     DirectoryInfo d = new DirectoryInfo("Sounds");
@@ -50,7 +52,7 @@ namespace HoppoPlugin
                 }
                 else
                 {
-                    MessageBoxResult m = MessageBox.Show("一直出现同一错误？点击确定前往百度网盘下载必要文件，并且解压至KCV目录，即可正常使用HoppoPlugin。\n如果确认要这么做，点击确定后点击完成设置", "确认", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    MessageBoxResult m = MessageBox.Show("一直出现同一错误？点击确定前往百度网盘下载必要文件，并且解压至KCV目录，即可正常使用HoppoPlugin。\n确认么？", "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Question);
                     if(m == MessageBoxResult.Yes)
                     {
                         Process.Start("http://pan.baidu.com/s/1AkGkY;");
@@ -59,25 +61,24 @@ namespace HoppoPlugin
                     }
                 }
             }
-
-
-                catch(UnauthorizedAccessException uae)
-            {
-                MessageBox.Show("权限不足，无法在KCV目录创建文件夹，请使用管理员身份运行KCV再试！");
-                Btn_Retry.Visibility = Visibility.Visible;
-
-            }
-
-                catch(WebException we)
-            {
-                MessageBox.Show("网络出现问题！可能是由于您的互联网提供商屏蔽了HoppoPlugin的服务器或者是网络不稳定，请重试3次！");
-                Btn_Retry.Visibility = Visibility.Visible;
-            }
             catch(Exception ex)
             {
-                Tbl_Introdution.Text = "错误！请重试";
-                Btn_Retry.Visibility = Visibility.Visible;
-                MessageBox.Show(ex.ToString());
+                if(ex is UnauthorizedAccessException)
+                {
+                    MessageBox.Show("权限不足，无法在KCV目录创建文件夹，请使用管理员身份运行KCV再试！");
+                    Btn_Retry.Visibility = Visibility.Visible;
+                }
+                else if (ex is WebException)
+                {
+                    MessageBox.Show("网络出现问题！请重试");
+                    Btn_Retry.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    Tbl_Introdution.Text = "错误！请重试";
+                    Btn_Retry.Visibility = Visibility.Visible;
+                    MessageBox.Show(ex.ToString());
+                }
             }
         }
 
@@ -95,7 +96,7 @@ namespace HoppoPlugin
             {
                 WebClient w = new WebClient();
                 w.DownloadFile("http://provissy.com/WPFToolkit.dll", UniversalConstants.CurrentDirectory + @"\WPFToolkit.dll");
-                FileStream file = new FileStream(UniversalConstants.CurrentDirectory + @"\WPFToolkit.dll", System.IO.FileMode.Open);
+                FileStream file = new FileStream(UniversalConstants.CurrentDirectory + @"\WPFToolkit.dll", FileMode.Open);
                 MD5 md5 = new MD5CryptoServiceProvider();
                 byte[] retVal = md5.ComputeHash(file);
                 file.Close();
@@ -121,7 +122,7 @@ namespace HoppoPlugin
             {
                 WebClient w = new WebClient();
                 w.DownloadFile("http://provissy.com/System.Windows.Controls.DataVisualization.Toolkit.dll", UniversalConstants.CurrentDirectory + @"\System.Windows.Controls.DataVisualization.Toolkit.dll");
-                FileStream file = new FileStream(UniversalConstants.CurrentDirectory + @"\System.Windows.Controls.DataVisualization.Toolkit.dll", System.IO.FileMode.Open);
+                FileStream file = new FileStream(UniversalConstants.CurrentDirectory + @"\System.Windows.Controls.DataVisualization.Toolkit.dll", FileMode.Open);
                 MD5 md5 = new MD5CryptoServiceProvider();
                 byte[] retVal = md5.ComputeHash(file);
                 file.Close();
@@ -147,7 +148,7 @@ namespace HoppoPlugin
             {
                 WebClient w = new WebClient();
                 w.DownloadFile("http://provissy.com/nekoError.png", UniversalConstants.CurrentDirectory + @"\HoppoPlugin\nekoError.png");
-                FileStream file = new FileStream(UniversalConstants.CurrentDirectory + @"\HoppoPlugin\nekoError.png", System.IO.FileMode.Open);
+                FileStream file = new FileStream(UniversalConstants.CurrentDirectory + @"\HoppoPlugin\nekoError.png", FileMode.Open);
                 MD5 md5 = new MD5CryptoServiceProvider();
                 byte[] retVal = md5.ComputeHash(file);
                 file.Close();
@@ -167,22 +168,13 @@ namespace HoppoPlugin
             });
         }
 
-        private async Task<double> uploadUsage()
+        private async Task<double> recordUsage()
         {
             return await Task.Run(() =>
             {
-                Microsoft.VisualBasic.Devices.Computer c = new Microsoft.VisualBasic.Devices.Computer();
-                Random r = new Random();
-                int identity = r.Next();
-                WebClient w = new WebClient();
-                StreamWriter s = new StreamWriter(UniversalConstants.CurrentDirectory + c.Name + c.Info.OSFullName + identity);
-                s.WriteLine(Guid.NewGuid().ToString());
-                s.WriteLine(DateTime.Now.ToLongDateString() + DateTime.Now.ToLongTimeString());
-                s.WriteLine(GetSystemType());
-                s.WriteLine(GetTotalPhysicalMemory());
-                s.Close();
-                w.UploadFile("http://provissy.com/UploadToUsageFolder.php", "POST", UniversalConstants.CurrentDirectory + c.Name + c.Info.OSFullName + identity);
-                File.Delete(UniversalConstants.CurrentDirectory + c.Name + c.Info.OSFullName + identity);
+                var req = WebRequest.Create("http://provissy.com/RecordUsage.php");
+                req.Method = "GET";
+                var rsp = req.GetResponse();
                 return 20;
             });
         }
@@ -195,66 +187,6 @@ namespace HoppoPlugin
             }
         }
 
-        string GetTotalPhysicalMemory()
-        {
-            try
-            {
-
-                string st = "";
-                ManagementClass mc = new ManagementClass("Win32_ComputerSystem");
-                ManagementObjectCollection moc = mc.GetInstances();
-                foreach (ManagementObject mo in moc)
-                {
-
-                    st = mo["TotalPhysicalMemory"].ToString();
-
-                }
-                moc = null;
-                mc = null;
-                return st;
-            }
-            catch
-            {
-                return "unknow";
-            }
-            finally
-            {
-            }
-        }
-
-        string GetSystemType()
-        {
-            try
-            {
-                string st = "";
-                ManagementClass mc = new ManagementClass("Win32_ComputerSystem");
-                ManagementObjectCollection moc = mc.GetInstances();
-                foreach (ManagementObject mo in moc)
-                {
-
-                    st = mo["SystemType"].ToString();
-
-                }
-                moc = null;
-                mc = null;
-                return st;
-            }
-            catch
-            {
-                return "unknow";
-            }
-            finally
-            {
-            }
-
-        }
-
-        private void TextBlock_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            Clipboard.SetDataObject("linxunpei@hotmail.com");
-            MessageBox.Show("支付宝地址已复制！");
-        }
-
         int retryCount = 0;
 
         private void Btn_Retry_Click(object sender, RoutedEventArgs e)
@@ -262,16 +194,6 @@ namespace HoppoPlugin
             CallMethodButton_Click(null, null);
             Tbl_Introdution.Text = "正在重试...";
             retryCount++;
-        }
-
-        private void TextBlock_MouseDown_1(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            Process.Start("http://provissy.com/progit/");
-        }
-
-        private void TextBlock_MouseDown_2(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            Process.Start("http://provissy.com/JumpToKcc.php");
         }
     }
 }

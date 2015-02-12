@@ -18,7 +18,7 @@
              xmlns:hp="clr-namespace:HoppoPlugin"
 			 mc:Ignorable="d"
 			 d:DesignWidth="580"
-			 d:DesignHeight="365"
+			 d:DesignHeight="360"
 			 FontSize="12"
 			 d:DataContext="{d:DesignInstance viewModels:SettingsViewModel}" FontFamily="Meiryo">
     <UserControl.Resources>

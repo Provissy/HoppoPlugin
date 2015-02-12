@@ -775,7 +775,7 @@ namespace HoppoPlugin
                 MessageBoxResult mbr = MessageBox.Show("您并未运行航海日志？请运行航海日志或点击确定前往下载，点击否则继续设置，点击取消终止设置。","Warning",MessageBoxButton.YesNoCancel,MessageBoxImage.Question);
                 if(mbr == MessageBoxResult.Yes)
                 {
-                    Process.Start("https://kancolle.sanaechan.net/");
+                    Process.Start("http://nekopanda.blog.jp/");
                 }
                 else if (mbr == MessageBoxResult.No)
                 {
