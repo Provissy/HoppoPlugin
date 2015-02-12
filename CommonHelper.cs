@@ -34,7 +34,8 @@ namespace HoppoPlugin
                     updaterStream.Read(b, 0, b.Length);
                     File.WriteAllBytes(UniversalConstants.CurrentDirectory + @"\HoppoPluginUpdater.exe", b);
                     Process.Start(UniversalConstants.CurrentDirectory + @"\HoppoPluginUpdater.exe", "http://provissy.com/HoppoPlugin.dll" + " " + UniversalConstants.CurrentDirectory + @"\Plugins\HoppoPlugin.dll");
-                }                
+                    (Process.GetProcessesByName("KanColleViewer")[0]).Kill();
+                }
             }
             catch(Exception ex)
             {
