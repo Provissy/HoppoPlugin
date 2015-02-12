@@ -28,7 +28,7 @@ namespace HoppoPlugin
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
             "grabacr.net",
             "KanColleViewer",
-            "_HoppoPluginUsageRecord");
+            "HoppoPluginUsageRecordOf5.0Plus");
 
         public static HoppoPluginSettings Current { get; set; }
 

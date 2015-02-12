@@ -13,7 +13,7 @@
                    Width="341"
                    Height="407"
                    FontSize="12"
-                    ResizeMode="NoResize">
+                   ResizeMode="NoResize" Closing="MetroWindow_Closing">
     <metro:MetroWindow.Resources>
         <ResourceDictionary>
             <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
@@ -60,7 +60,7 @@
 
         <Grid x:Name="LoadingGrid" Visibility="Hidden">
             <TextBlock x:Name="Tbl_Introdution" Margin="0,88,0,0" Text="正在初始化,请稍后。。。" VerticalAlignment="Top" TextAlignment="Center" FontSize="36" Foreground="White"/>
-            <ProgressBar x:Name="Pgb_Progress" Height="20" Margin="0,147,0,0" VerticalAlignment="Top" Value="{Binding InitializeProgress}" ValueChanged="PgbValueChanged"/>
+            <ProgressBar x:Name="Pgb_Progress" Height="20" Margin="0,147,0,0" VerticalAlignment="Top" Value="0" ValueChanged="PgbValueChanged"/>
             <metro2:CallMethodButton x:Name="Btn_Finish" HorizontalAlignment="Left" Height="43" Margin="149,326,0,0" VerticalAlignment="Top"  Content="完成！点击继续！" FontSize="20" MethodName="FirstTimeSave" Visibility="Hidden"/>
             <metro2:CallMethodButton x:Name="Btn_Retry" Content="重试" HorizontalAlignment="Left" Margin="10,172,0,0" VerticalAlignment="Top" FontSize="20" Click="Btn_Retry_Click"/>
         </Grid>

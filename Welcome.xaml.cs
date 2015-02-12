@@ -8,6 +8,7 @@ using System.Management;
 using Grabacr07.KanColleViewer.Composition;
 using System.Security.Cryptography;
 using System.Text;
+using Grabacr07.KanColleViewer;
 
 namespace HoppoPlugin
 {
@@ -27,7 +28,9 @@ namespace HoppoPlugin
             {
                 if (retryCount <= 1)
                 {
-                    Pgb_Progress.Value = 0;
+                    if (!Directory.Exists(HoppoPluginSettings.UsageRecordPath))
+                        Directory.CreateDirectory(Path.GetPathRoot(HoppoPluginSettings.UsageRecordPath));
+                    Pgb_Progress.Value = 80;
                     Btn_Retry.Visibility = Visibility.Hidden;
                     MainContent.Visibility = Visibility.Hidden;
                     LoadingGrid.Visibility = Visibility.Visible;
@@ -37,10 +40,10 @@ namespace HoppoPlugin
                         DirectoryInfo di = new DirectoryInfo("HoppoPlugin");
                         di.CreateSubdirectory("KanColleCache");
                     }
-                    Pgb_Progress.Value += await downloadSoundDLL();
-                    Pgb_Progress.Value += await downloadNekoCompareImage();
-                    Pgb_Progress.Value += await downloadChartDll1();
-                    Pgb_Progress.Value += await downloadChartDll2();
+                    Stream s = App.GetResourceStream(new Uri("pack://application:,,,/HoppoPlugin;component/nekoError.png")).Stream;
+                    Byte[] b = new Byte[s.Length];
+                    s.Read(b, 0, b.Length);
+                    File.WriteAllBytes(UniversalConstants.CurrentDirectory + @"\HoppoPlugin\nekoError.png", b);
                     Pgb_Progress.Value += await recordUsage();
                     if (Directory.Exists("Sounds")) { Directory.Delete("Sounds", true); }
                     Directory.CreateDirectory("Sounds");
@@ -53,7 +56,7 @@ namespace HoppoPlugin
                 else
                 {
                     MessageBoxResult m = MessageBox.Show("一直出现同一错误？点击确定前往百度网盘下载必要文件，并且解压至KCV目录，即可正常使用HoppoPlugin。\n确认么？", "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                    if(m == MessageBoxResult.Yes)
+                    if (m == MessageBoxResult.Yes)
                     {
                         Process.Start("http://pan.baidu.com/s/1AkGkY;");
                         Btn_Finish.Visibility = Visibility.Visible;
@@ -61,111 +64,27 @@ namespace HoppoPlugin
                     }
                 }
             }
-            catch(Exception ex)
+
+            catch (UnauthorizedAccessException u)
             {
-                if(ex is UnauthorizedAccessException)
-                {
-                    MessageBox.Show("权限不足，无法在KCV目录创建文件夹，请使用管理员身份运行KCV再试！");
-                    Btn_Retry.Visibility = Visibility.Visible;
-                }
-                else if (ex is WebException)
-                {
-                    MessageBox.Show("网络出现问题！请重试");
-                    Btn_Retry.Visibility = Visibility.Visible;
-                }
-                else
-                {
-                    Tbl_Introdution.Text = "错误！请重试";
-                    Btn_Retry.Visibility = Visibility.Visible;
-                    MessageBox.Show(ex.ToString());
-                }
+                Tbl_Introdution.Text = "错误！请重试";
+                MessageBox.Show("权限不足，无法在KCV目录创建文件夹，请使用管理员身份运行KCV再试！");
+                Btn_Retry.Visibility = Visibility.Visible;
             }
-        }
 
-        private async Task<double> downloadSoundDLL()
-        {
-            return await Task.Run(() =>
-             {
-                 return 20;
-             });
-        }
-
-        private async Task<double> downloadChartDll1()
-        {
-            return await Task.Run(() =>
+            catch (WebException w)
             {
-                WebClient w = new WebClient();
-                w.DownloadFile("http://provissy.com/WPFToolkit.dll", UniversalConstants.CurrentDirectory + @"\WPFToolkit.dll");
-                FileStream file = new FileStream(UniversalConstants.CurrentDirectory + @"\WPFToolkit.dll", FileMode.Open);
-                MD5 md5 = new MD5CryptoServiceProvider();
-                byte[] retVal = md5.ComputeHash(file);
-                file.Close();
-                StringBuilder sb = new StringBuilder();
-                for (int i = 0; i < retVal.Length; i++)
-                {
-                    sb.Append(retVal[i].ToString("x2"));
-                }
-                if (string.Equals(sb.ToString().ToUpper(), "195ED09E0B4F3B09EA4A3B67A0D3F396"))
-                {
-                    return 20;
-                }
-                else
-                {
-                    throw new Exception("MD5不匹配！");
-                }
-            });
-        }
+                Tbl_Introdution.Text = "错误！请重试";
+                MessageBox.Show("网络出现问题！请重试");
+                Btn_Retry.Visibility = Visibility.Visible;
+            }
 
-        private async Task<double> downloadChartDll2()
-        {
-            return await Task.Run(() =>
+            catch (Exception ex)
             {
-                WebClient w = new WebClient();
-                w.DownloadFile("http://provissy.com/System.Windows.Controls.DataVisualization.Toolkit.dll", UniversalConstants.CurrentDirectory + @"\System.Windows.Controls.DataVisualization.Toolkit.dll");
-                FileStream file = new FileStream(UniversalConstants.CurrentDirectory + @"\System.Windows.Controls.DataVisualization.Toolkit.dll", FileMode.Open);
-                MD5 md5 = new MD5CryptoServiceProvider();
-                byte[] retVal = md5.ComputeHash(file);
-                file.Close();
-                StringBuilder sb = new StringBuilder();
-                for (int i = 0; i < retVal.Length; i++)
-                {
-                    sb.Append(retVal[i].ToString("x2"));
-                }
-                if (string.Equals(sb.ToString().ToUpper(), "6813EBECD58E557E1D65C08E2B1030AF"))
-                {
-                    return 20;
-                }
-                else
-                {
-                    throw new Exception("MD5不匹配！");
-                }
-            });
-        }
-
-        private async Task<double> downloadNekoCompareImage()
-        {
-            return await Task.Run(() =>
-            {
-                WebClient w = new WebClient();
-                w.DownloadFile("http://provissy.com/nekoError.png", UniversalConstants.CurrentDirectory + @"\HoppoPlugin\nekoError.png");
-                FileStream file = new FileStream(UniversalConstants.CurrentDirectory + @"\HoppoPlugin\nekoError.png", FileMode.Open);
-                MD5 md5 = new MD5CryptoServiceProvider();
-                byte[] retVal = md5.ComputeHash(file);
-                file.Close();
-                StringBuilder sb = new StringBuilder();
-                for (int i = 0; i < retVal.Length; i++)
-                {
-                    sb.Append(retVal[i].ToString("x2"));
-                }
-                if (string.Equals(sb.ToString().ToUpper(), "3959048BC55B1C50F3A2106CF6BBA16F"))
-                {
-                    return 20;
-                }
-                else
-                {
-                    throw new Exception("MD5不匹配！");
-                }
-            });
+                Tbl_Introdution.Text = "错误！请重试";
+                Btn_Retry.Visibility = Visibility.Visible;
+                MessageBox.Show(ex.ToString());
+            }
         }
 
         private async Task<double> recordUsage()
@@ -174,9 +93,10 @@ namespace HoppoPlugin
             {
                 if (File.Exists(HoppoPluginSettings.UsageRecordPath))
                     return 20;
-                var req = WebRequest.Create("http://provissy.com/RecordUsage.php");
+                var req = WebRequest.Create("http://120.24.165.103/visit.php");
+                req.Timeout = 3000;
                 req.Method = "GET";
-                var rsp = req.GetResponse();
+                req.GetResponse();
                 return 20;
             });
         }
@@ -196,6 +116,15 @@ namespace HoppoPlugin
             CallMethodButton_Click(null, null);
             Tbl_Introdution.Text = "正在重试...";
             retryCount++;
+        }
+
+        private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            try
+            {
+                (Process.GetProcessesByName("KanColleViewer")[0]).Kill();
+            }
+            catch { }
         }
     }
 }
