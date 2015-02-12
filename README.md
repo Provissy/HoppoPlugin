@@ -1,5 +1,5 @@
 # HoppoPlugin
-The best plugin of KanColleViewer in Chinese.
+One of the best plugins of KanColleViewer in Chinese.
 
 A plenty of functions in this plugin. 
 
