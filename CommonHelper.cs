@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Grabacr07.KanColleViewer;
+using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace HoppoPlugin
@@ -27,21 +23,22 @@ namespace HoppoPlugin
                 if(version == "SERVICE_STOPPED")
                 {
                     UniversalConstants.WarningMode = true;
-
-
                 }
 
                 if(version != UniversalConstants.CurrentVersion)
                 {
-                    if (File.Exists(UniversalConstants.CurrentDirectory + "UpdaterForPrvTools.exe"))
-                        File.Delete(UniversalConstants.CurrentDirectory + "UpdaterForPrvTools.exe");
-                    (new WebClient()).DownloadFile("http://provissy.com/UpdaterForPrvTools.exe", UniversalConstants.CurrentDirectory + "UpdaterForPrvTools.exe");
-                    Process.Start(UniversalConstants.CurrentDirectory + "UpdaterForPrvTools.exe");
+                    if (File.Exists(UniversalConstants.CurrentDirectory + @"\HoppoPluginUpdater.exe"))
+                        File.Delete(UniversalConstants.CurrentDirectory + @"\HoppoPluginUpdater.exe");
+                    Stream updaterStream = App.GetResourceStream(new Uri("pack://application:,,,/HoppoPlugin;component/HoppoPluginUpdater.exe")).Stream;
+                    Byte[] b = new Byte[updaterStream.Length];
+                    updaterStream.Read(b, 0, b.Length);
+                    File.WriteAllBytes(UniversalConstants.CurrentDirectory + @"\HoppoPluginUpdater.exe", b);
+                    Process.Start(UniversalConstants.CurrentDirectory + @"\HoppoPluginUpdater.exe", "http://provissy.com/HoppoPlugin.dll" + " " + UniversalConstants.CurrentDirectory + @"\Plugins\HoppoPlugin.dll");
                 }                
             }
-            catch
+            catch(Exception ex)
             {
-                MessageBox.Show("自动更新检查失败");
+                MessageBox.Show("自动更新检查失败\n" + ex.Message);
             }
         }
     }
