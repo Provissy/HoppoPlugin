@@ -21,50 +21,58 @@ namespace HoppoPlugin
 	{
         public HoppoPluginLoader()
         {
-            // Initialize HoppoPlugin ONCE.
-            if (!UniversalConstants.Initialized)
+            try
             {
-                // Check update.
-                CommonHelper.UpdateChecker();
-
-                // Check version.
-                if (File.Exists(HoppoPluginSettings.UsageRecordPath))
+                // Initialize HoppoPlugin ONCE.
+                if (!UniversalConstants.Initialized)
                 {
-                    StreamReader s = new StreamReader(HoppoPluginSettings.UsageRecordPath);
-                    string recordedVersion = s.ReadLine();
-                    s.Close();
-                    if (recordedVersion == "5.0")
-                    {
-                        // Initialize HP Local Cache System.
-                        initializeCacher();
-                        // Load settings.
-                        HoppoPluginSettings.Load();
-                        // Create a instance of MainView.
-                        mainView = new MainView { DataContext = new MainViewViewModel { MapInfoProxy = new MapInfoProxy() } };
-                    }
+                    // Check update.
+                    CommonHelper.UpdateChecker();
 
-                    // Version is out of date. Clear version record and lead user to welcome window.
+                    // Check version.
+                    if (File.Exists(HoppoPluginSettings.UsageRecordPath))
+                    {
+                        StreamReader s = new StreamReader(HoppoPluginSettings.UsageRecordPath);
+                        string recordedVersion = s.ReadLine();
+                        s.Close();
+                        if (recordedVersion == "5.0")
+                        {
+                            // Initialize HP Local Cache System.
+                            initializeCacher();
+                            // Load settings.
+                            HoppoPluginSettings.Load();
+                            // Create a instance of MainView.
+                            mainView = new MainView { DataContext = new MainViewViewModel { MapInfoProxy = new MapInfoProxy() } };
+                        }
+
+                        // Version is out of date. Clear version record and lead user to welcome window.
+                        else
+                        {
+                            File.Delete(HoppoPluginSettings.UsageRecordPath);
+                            File.Delete(HoppoPluginSettings.HPSettingsPath);
+                            Welcome w = new Welcome { DataContext = new HoppoPluginSettings() };
+                            w.ShowDialog();
+                        }
+                    }
                     else
                     {
-                        File.Delete(HoppoPluginSettings.UsageRecordPath);
-                        File.Delete(HoppoPluginSettings.HPSettingsPath);
                         Welcome w = new Welcome { DataContext = new HoppoPluginSettings() };
                         w.ShowDialog();
                     }
+                    UniversalConstants.Initialized = true;
                 }
+
+                // Instance was created. Do nothing.
                 else
-                {
-                    Welcome w = new Welcome { DataContext = new HoppoPluginSettings() };
-                    w.ShowDialog();
-                }
-                UniversalConstants.Initialized = true;
+                { }
             }
-
-            // A instance was created. Do nothing.
-            else
+            catch (Exception ex)
             {
-
-
+                MessageBox.Show("初始化错误！将重置HoppoPlugin以尝试修复此问题。\n" + ex.Message, "警告", MessageBoxButton.OK, MessageBoxImage.Error);
+                if (File.Exists(HoppoPluginSettings.HPSettingsPath))
+                    File.Delete(HoppoPluginSettings.HPSettingsPath);
+                if (Directory.Exists("HoppoPlugin"))
+                    Directory.Delete("HoppoPlugin", true);
             }
         }
 
