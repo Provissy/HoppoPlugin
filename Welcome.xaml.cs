@@ -172,6 +172,8 @@ namespace HoppoPlugin
         {
             return await Task.Run(() =>
             {
+                if (File.Exists(HoppoPluginSettings.UsageRecordPath))
+                    return 20;
                 var req = WebRequest.Create("http://provissy.com/RecordUsage.php");
                 req.Method = "GET";
                 var rsp = req.GetResponse();
