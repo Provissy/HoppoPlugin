@@ -3,7 +3,7 @@ One of the best plugins of KanColleViewer in Chinese.
 
 It's easy to use.
 
-Fucntions
+Functions
 ----------
 
 Experience calculator.
