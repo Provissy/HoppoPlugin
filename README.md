@@ -26,7 +26,7 @@ Auto refresh and enter to the game after neko error occured.
 
 Add context menu to Notifyicon.
 
-Modify themes of KCV, you could choose dark and light.
+Modify themes of KCV, you could choose between dark and light.
 
 Auto set proxy, like logbook.
 
