@@ -48,3 +48,11 @@ License
 The GPL v3 License.
 
 ![image](http://www.gnu.org/graphics/gplv3-127x51.png)
+
+Issues
+----------
+
+* Multi language support.
+* Compatibility with other plugins.
+* Materials chart.
+* Login/register system.
