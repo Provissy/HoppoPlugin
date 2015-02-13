@@ -34,7 +34,7 @@ Auto set proxy, like logbook.
 
 Local cache available.
 
-Modify game content, like graph, sound, background etc.
+Modify game content, like graphic, sound, background etc.
 
 
 Screenshot
@@ -56,3 +56,4 @@ Issues
 * Compatibility with other plugins.
 * Materials chart.
 * Login/register system.
+* Code too dirty.
