@@ -10,7 +10,7 @@ Experience calculator.
 
 View HP of event map.
 
-Modify the layout of KCV.
+Modify layout of KCV.
 
 New LoS formula.
 
