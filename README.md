@@ -34,6 +34,11 @@ Local cache available.
 
 Modify game content, like graphic, sound, background etc.
 
+Usage
+----------
+
+Throw the dll to "Plugins" folder under KanColleViewer's root path.
+
 
 Screenshot
 ----------
