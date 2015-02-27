@@ -57,6 +57,7 @@ Issues
 
 * Multi language support.
 * Compatibility with other plugins.
+* Compatibiliry with KanColleViewer 3.6+.
 * Materials chart.
 * Login/register system.
 * Code too dirty.
