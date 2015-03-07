@@ -50,8 +50,8 @@ namespace HoppoPlugin
                 closeItem.Text = "退出 KanColleViewer（强制）";
                 closeItem.Click += new EventHandler(delegate
                     {
-                        System.Diagnostics.Process[] killprocess = System.Diagnostics.Process.GetProcessesByName("KanColleViewer");
-                        foreach (System.Diagnostics.Process p in killprocess)
+                        Process[] killprocess = Process.GetProcessesByName("KanColleViewer");
+                        foreach (Process p in killprocess)
                         {
                             p.Kill();
                         }
@@ -66,9 +66,6 @@ namespace HoppoPlugin
 
                 notifyIcon.ContextMenu = menu;
             }
-
-            
-
         }
 
         private void timer_Tick(object sender, EventArgs e)
@@ -145,11 +142,7 @@ namespace HoppoPlugin
                     return FileList[Rnd.Next(0, FileList.Count)];
                 }
             }
-            catch (Exception ex)
-            {
-
-            }
-
+            catch { }
             return null;
         }
 

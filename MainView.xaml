@@ -45,7 +45,7 @@
 
 
         <Grid x:Name="WARNING_GRID" Visibility="Hidden">
-            <TextBlock HorizontalAlignment="Left" Margin="20,84,0,0" VerticalAlignment="Top" FontSize="32" Width="560"><Run Text="插件的试用许可已被作者终止。"/><LineBreak/><Run Text="您可以通过电子邮件联系我了解详情。"/><LineBreak/><Run Text="provissy@gmail.com"/></TextBlock>
+            <TextBlock HorizontalAlignment="Left" Margin="20,84,0,0" VerticalAlignment="Top" FontSize="32" Width="560"><Run Text="插件的使用许可已被作者终止。"/><LineBreak/><Run Text="您可以通过电子邮件联系我了解详情。"/><LineBreak/><Run Text="provissy@gmail.com"/></TextBlock>
 
 
         </Grid>
@@ -78,27 +78,18 @@
 
             </Grid>
 
-            <Grid x:Name="Counter" Visibility="Hidden">
-                <metro:PromptTextBox HorizontalAlignment="Left" Margin="100,115,0,0" TextWrapping="Wrap" Text="{Binding pt:SrotieResult}" VerticalAlignment="Top"/>
-                <TextBlock HorizontalAlignment="Left" Margin="10,115,0,0" Text="出击次数" VerticalAlignment="Top"/>
-                <TextBlock HorizontalAlignment="Left" Margin="3,170,0,0" Text="进BOSS次数" VerticalAlignment="Top"/>
-                <metro:PromptTextBox HorizontalAlignment="Left" Margin="100,159,0,0" TextWrapping="Wrap" Text="{Binding pt:BossSrotieResult}" VerticalAlignment="Top"/>
-                <metro2:CallMethodButton x:Name="btn_Counter_Refresh" Content="CallMethodButton" HorizontalAlignment="Left" Margin="235,80,0,0" VerticalAlignment="Top"/>
-                <Label Content="该功能不可用" HorizontalAlignment="Left" Margin="278,159,0,0" VerticalAlignment="Top"/>
-            </Grid>
-
             <Grid x:Name="ErrorHandle" Height="350" VerticalAlignment="Top" Visibility="Hidden">
                 <TextBlock Margin="10,50,20,0" Text="很抱歉！程序出现了问题！" VerticalAlignment="Top" FontSize="36" TextAlignment="Center"/>
                 <TextBox x:Name="ErrorMessageTextBox" Margin="10,96,10,10" TextWrapping="Wrap" Text="" IsReadOnly="True"/>
             </Grid>
 
 
-            <Grid x:Name="WelcomePage" Visibility="Hidden">
+            <Grid x:Name="WelcomePage">
                 <TextBlock x:Name="tbl_Introdution" Margin="10,100,10,0" VerticalAlignment="Top" FontSize="40" TextAlignment="Center" FontFamily="Meiryo UI"><Run Text="欢迎使用 北方Plugin！"/><LineBreak/><Run Text="ホッポウプラグインへようこそ！"/></TextBlock>
-                <metro2:CallMethodButton x:Name="chkUpdateButton" Content="检查更新" Margin="0,0,7,0" Height="24" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="84" Click="CallMethodButton_Click_1" IsEnabled="False"/>
-                <metro2:CallMethodButton x:Name="btn_Donate" Content="捐赠！" HorizontalAlignment="Right" Margin="0,0,96,0" VerticalAlignment="Bottom" Click="funcbtn_Donate_Click" Width="61"/>
-                <Label x:Name="lb_UpdateInformation" Content="当前版本 V5.0" HorizontalAlignment="Right" Margin="0,0,7,24" VerticalAlignment="Bottom" Cursor="Hand"/>
-                <metro2:CallMethodButton Background="Purple" Foreground="White" x:Name="btn_UpdateLog" Content="Provissy.com" HorizontalAlignment="Right" Margin="0,0,162,0" VerticalAlignment="Bottom" Width="115" Click="btn_UpdateLog_Click"/>
+                <metro2:CallMethodButton x:Name="chkUpdateButton" Content="检查更新" Margin="0,0,7,0" Height="24" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="84" Click="CallMethodButton_Click_1"/>
+                <metro2:CallMethodButton x:Name="btn_Donate" Content="捐赠 !" Foreground="White" Background="Purple"  HorizontalAlignment="Right" Margin="0,0,96,0" VerticalAlignment="Bottom" Click="funcbtn_Donate_Click" Width="61" FontSize="14" Height="24"/>
+                <Label x:Name="lb_UpdateInformation" Content="当前版本 V6.0" HorizontalAlignment="Right" Margin="0,0,7,24" VerticalAlignment="Bottom" Cursor="Hand"/>
+                <metro2:CallMethodButton x:Name="btn_UpdateLog" Content="HoppoPlugin介绍" HorizontalAlignment="Right" Margin="0,0,162,0" VerticalAlignment="Bottom" Width="115" Click="btn_UpdateLog_Click"/>
                 <Rectangle Fill="#FFFF3A00" Height="30" Margin="0,50,0,0" Stroke="Black" VerticalAlignment="Top" Visibility="Hidden"/>
                 <TextBlock x:Name="tbl_MainState" Margin="0,50,0,0" Text="V2.8.2" VerticalAlignment="Top" Height="30" TextAlignment="Center" FontSize="20" Foreground="White" Visibility="Hidden"/>
                 <metro2:CallMethodButton x:Name="Btn_MyAccount" Content="□ 我的账户" HorizontalAlignment="Right" Margin="0,15,15,0" FontSize="16" Background="Green" BorderBrush="{x:Null}" Click="Btn_MyAccount_Click" Foreground="White" Height="28" VerticalAlignment="Top"/>
@@ -125,6 +116,8 @@
 
                 </metro2:CallMethodButton>
                 <Label Content="了解安全、快速、免费的Progit艦これ防猫加速服务 ->" HorizontalAlignment="Right" Margin="0,0,7,50" VerticalAlignment="Bottom" FontSize="14" FontStyle="Italic" Cursor="Hand" MouseLeftButtonDown="Label_MouseLeftButtonDown" FontFamily="Microsoft YaHei"/>
+                <TextBlock HorizontalAlignment="Left" Margin="10,0,0,52" VerticalAlignment="Bottom" FontSize="16"><Run Text="HoppoPlugin"/><LineBreak/><Run Text="防猫次数："/></TextBlock>
+                <TextBlock x:Name="Tbl_NekoCount" HorizontalAlignment="Left" Margin="10,0,0,5" Text="0" VerticalAlignment="Bottom" FontSize="36"/>
             </Grid>
 
             <Grid x:Name="DonateMe" Visibility="Hidden">
@@ -240,45 +233,9 @@
                 <TextBlock HorizontalAlignment="Left" Margin="10,117,0,0" Text="音量：" VerticalAlignment="Top" FontSize="16"/>
                 <TextBlock HorizontalAlignment="Left" Margin="10,144,0,0" Text="{Binding Path=Value ,ElementName=Slb_Volume, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" FontSize="16" Width="39" TextWrapping="NoWrap"/>
                 <CheckBox Content="打开托盘右键菜单（不推荐Win8用户勾选）" IsChecked="{Binding CurrentEnableNotifyIcon}" HorizontalAlignment="Left" Margin="105,128,0,0" VerticalAlignment="Top"/>
+                <CheckBox Content="HoppoPlugin游戏防猫系统" IsChecked="{Binding CurrentEnableNAS}" HorizontalAlignment="Left" Margin="315,86,0,0" VerticalAlignment="Top" FontSize="14"/>
 
             </Grid>
-
-            <!--<Grid x:Name="AkiEvent2014" Visibility="Hidden">
-                <metro2:CallMethodButton Content="チャットルームを&#xD;&#xA;         修復" HorizontalAlignment="Left" Margin="180,326,0,0" VerticalAlignment="Top" Height="39" Width="115" Click="CallMethodButton_Click_10" IsEnabled="False"/>
-                <Label x:Name="lb_BBSTestIntrodution" Content="HoppoPlugin&#xD;&#xA;聊天室β5.1" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" FontSize="36" Width="285" Height="112"/>
-                <TextBox x:Name="tb_BBS_Username" HorizontalAlignment="Left" Height="23" Margin="10,176,0,0" TextWrapping="Wrap" Text="输入你的名字" VerticalAlignment="Top" Width="285"/>
-                <metro2:CallMethodButton x:Name="btn_BBS_SendComment" Content="发送" HorizontalAlignment="Left" Margin="10,326,0,0" VerticalAlignment="Top" Height="39" Width="170" Click="btn_BBS_SendComment_Click" FontSize="16"/>
-                <ScrollViewer x:Name="sv_BBS_ForRtbComment" Margin="300,30,0,0" VerticalScrollBarVisibility="Auto" HorizontalAlignment="Left" VerticalAlignment="Top" Height="335">
-                    <RichTextBox x:Name="rtb_BBS_Comment" Block.LineHeight="8" >
-
-                    </RichTextBox>
-                </ScrollViewer>
-                <ScrollViewer x:Name="sv_BBS_ForRtbCommentToSend" HorizontalAlignment="Left" Height="117" Margin="10,204,0,0" VerticalAlignment="Top" Width="285" VerticalScrollBarVisibility="Auto">
-                    <RichTextBox x:Name="rtb_BBS_CommentToSend" GotFocus="rtb_BBS_CommentToSend_GotFocus" Block.LineHeight="4" KeyDown="rtb_BBS_CommentToSend_KeyDown">
-                        <FlowDocument>
-                            <Paragraph>
-                                <Run Text="在这里输入内容"/>
-                            </Paragraph>
-                            <Paragraph>
-                                <Run Text="选中文字并点击相应按钮来改变样式"/>
-                            </Paragraph>
-                            <Paragraph>
-                                <Run Text="聊天室的文本是自动刷新的"/>
-                            </Paragraph>
-                            <Paragraph>
-                                <Run Text="可以通过Ctrl+Enter发送消息"/>
-                            </Paragraph>
-
-                        </FlowDocument>
-                    </RichTextBox>
-                </ScrollViewer>
-                <Button x:Name="btn_BBS_ZoomIn" Content="增大字号" HorizontalAlignment="Left" Margin="200,147,0,0" VerticalAlignment="Top" Width="95" Click="Button_Click_1"/>
-                <Button x:Name="btn_BBS_SetColorToRed" Content="红色" HorizontalAlignment="Left" Margin="140,147,0,0" VerticalAlignment="Top" Width="60" Click="btn_BBS_SetColorToRed_Click"/>
-                <Label x:Name="lb_BBS_ShowState" Content="状态表示" HorizontalAlignment="Left" Margin="10,147,0,0" VerticalAlignment="Top"/>
-                -->
-            <!--<metro2:CallMethodButton x:Name="btn_AkiEvent_MapViewer" Content="查看活动图余剩出击场数" HorizontalAlignment="Left" Margin="10,108,0,0" VerticalAlignment="Top" Height="44" Width="285" FontSize="19" Click="btn_AkiEvent_MapViewer_Click"/>-->
-            <!--
-            </Grid>-->
 
             <Grid x:Name="EventMapViewer" Margin="0,45,0,0" Visibility="Hidden">
                 <Grid.ColumnDefinitions>
@@ -312,7 +269,7 @@
                         <Button x:Name="Btn_CreateAccount" Content="注册" HorizontalAlignment="Left" Margin="214,149,0,0" VerticalAlignment="Top" Width="121" Height="58" FontSize="26" Click="Btn_CreateAccount_Click"/>
                         <Label x:Name="lb_Backup_Username" Content="" HorizontalAlignment="Left" Margin="465,27,0,0" VerticalAlignment="Top" FontSize="18"/>
                         <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="236" Margin="10,46,0,0" VerticalAlignment="Top" Width="346"/>
-                        <TextBlock x:Name="Tbl_PTAccountIntroduce" HorizontalAlignment="Left" Margin="29,55,0,0" VerticalAlignment="Top" FontSize="18"><Run Text="注册一个HoppoPlugin账户吧,"/><LineBreak/><Run Text="您将可以将统计信息和设置同步到云端"/><LineBreak/><Run Text="以及享受云服务带来的便利"/></TextBlock>
+                        <TextBlock x:Name="Tbl_PTAccountIntroduce" HorizontalAlignment="Left" Margin="29,55,0,0" VerticalAlignment="Top" FontSize="18"><Run Text="注册一个HoppoPlugin账户,"/><LineBreak/><Run Text="您将可以将统计信息和设置同步到云端"/><LineBreak/><Run Text="以及享受云服务带来的便利"/></TextBlock>
                         <metro2:CallMethodButton x:Name="Btn_ClickToLogin" Content="已有账户？点击登录" HorizontalAlignment="Left" Margin="29,226,0,0" VerticalAlignment="Top" Width="306" Height="45" BorderBrush="{x:Null}" FontSize="24" Click="Btn_ClickToLogin_Click">
                             <metro2:CallMethodButton.Background>
                                 <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
@@ -334,7 +291,7 @@
             </Grid>
 
             <Grid x:Name="LandscapeView" Visibility="Hidden">
-                <TextBlock HorizontalAlignment="Left" Margin="10,80,0,0" VerticalAlignment="Top" FontSize="36"><Run Text="请前往KCV的 设置 -&gt; Landscape"/><LineBreak/><Run Text="请前往KCV的 设置 -&gt; 行为设置"/></TextBlock>
+                <TextBlock HorizontalAlignment="Left" Margin="10,80,0,0" VerticalAlignment="Top" FontSize="36"><Run Text="请前往KCV的 设置-&gt;Landscape"/><LineBreak/><Run Text="请前往KCV的 设置-&gt;行为设置"/><LineBreak/><Run Text="不支持3.5版本以上的KCV"/></TextBlock>
                 <TextBlock HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom"><Run Text="Modified from @Gizeta's code under the MIT License."/><LineBreak/><Run Text="https://github.com/Gizeta/KCV.Landscape"/><LineBreak/><Run Text="https://github.com/Gizeta/KCV.ViewRangeCalc"/></TextBlock>
 
             </Grid>

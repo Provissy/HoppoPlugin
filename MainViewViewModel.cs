@@ -503,6 +503,24 @@ namespace HoppoPlugin
 
         #endregion
 
+        #region CurrentEnableNAS 変更通知プロパティ
+
+        public bool CurrentEnableNAS
+        {
+            get { return HoppoPluginSettings.Current.EnableNAS; }
+            set
+            {
+                if (HoppoPluginSettings.Current.EnableNAS != value)
+                {
+                    HoppoPluginSettings.Current.EnableNAS = value;
+                    HoppoPluginSettings.Current.Save();
+                    this.RaisePropertyChanged();
+                }
+            }
+        }
+
+        #endregion
+
         public override string Name
         {
             get { return "HoppoPlugin"; }
@@ -510,8 +528,6 @@ namespace HoppoPlugin
         }
 
         public Logger Logger { get; private set; }
-        public Counter Counter { get; private set; }
-        public BattleWatcher BattleWatcher { get; private set; }
 
         WebClient wClient = new WebClient();
 
@@ -563,7 +579,9 @@ namespace HoppoPlugin
             if(mbr == MessageBoxResult.No)
             {
                 e.Cancel = true;
+                return;
             }
+            NekoAvoidanceSystem.Shutdown();
         }
 
         public void clearHoppoPlugin()
@@ -574,7 +592,6 @@ namespace HoppoPlugin
                     return;
                 MessageBox.Show("清空设置后后将会关闭KanColleViewer！");
                 File.Delete(HoppoPluginSettings.HPSettingsPath);
-                //File.Delete(HoppoPluginSettings.UsageRecordPath);
                 (Process.GetProcessesByName("KanColleViewer")[0]).Kill();
             }
             catch(Exception ex)
@@ -631,6 +648,7 @@ namespace HoppoPlugin
 
         private void nekoDetector(bool b)
         {
+            MessageBox.Show("请注意，不能在分离模式下启用此功能。");
             IntPtr hWnd = GetForegroundWindow();
             RECT rect = new RECT();
             GetWindowRect(hWnd, ref rect);

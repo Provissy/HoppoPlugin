@@ -52,7 +52,7 @@
 
             <metro2:CallMethodButton Content="完成设置" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="197,313,0,0" FontSize="20" Width="128" Click="CallMethodButton_Click"/>
             <TextBlock HorizontalAlignment="Right" TextWrapping="Wrap" Text="Written by @Provissy , 2015" VerticalAlignment="Bottom" Foreground="White" FontSize="14" Margin="0,0,10,0"/>
-            <CheckBox Content="在托盘显示带有右键菜单的图标" HorizontalAlignment="Left" Margin="10,169,0,0" VerticalAlignment="Top" Foreground="White"/>
+            <CheckBox Content="在托盘显示带有右键菜单的图标（不推荐Win8用户勾选）" HorizontalAlignment="Left" Margin="10,169,0,0" VerticalAlignment="Top" Foreground="White"/>
             <TextBlock Margin="0,50,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="22" Foreground="White" TextAlignment="Center"><Run Text="欢迎使用 北方Plugin！"/><LineBreak/><Run Text="ホッポウプラグインへようこそ！"/><LineBreak/><Run/></TextBlock>
             <TextBlock HorizontalAlignment="Left" Margin="10,134,0,0" TextWrapping="Wrap" Text="完成一些基本设置并继续吧！" VerticalAlignment="Top" Foreground="White" FontSize="14" FontStyle="Italic" FontFamily="Microsoft YaHei"/>
 

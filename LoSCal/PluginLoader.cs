@@ -1,4 +1,5 @@
-﻿using Grabacr07.KanColleViewer.Composition;
+﻿using Grabacr07.KanColleViewer;
+using Grabacr07.KanColleViewer.Composition;
 using System.ComponentModel.Composition;
 
 namespace HoppoPlugin.LoSCal
@@ -14,6 +15,11 @@ namespace HoppoPlugin.LoSCal
 
         public PluginLoader()
         {
+            if (App.ProductInfo.Version.Major > 3)
+                return;
+            if (App.ProductInfo.Version.Minor > 5)
+                return;
+
             if (!hasInitialized)
             {
                 hasInitialized = true;

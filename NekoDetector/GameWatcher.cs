@@ -62,21 +62,8 @@ namespace HoppoPlugin
         public bool isEnabled { get { return _isEnabled; } set { _isEnabled = value; if (value) { timer.Start(); } } }
         public IntPtr HWND { get; set; }
 
-        #region Get bitmap of web browser
+        #region Get bitmap from web browser
 
-        /// <summary>  
-        /// 全屏截图   
-        /// </summary>  
-        /// <returns></returns>  
-        public System.Drawing.Image CaptureScreen()
-        {
-            return CaptureWindow(User32.GetDesktopWindow());
-        }
-        /// <summary>  
-        /// 指定窗口截图  
-        /// </summary>  
-        /// <param name="handle">窗口句柄. (在windows应用程序中, 从Handle属性获得)</param>  
-        /// <returns></returns>  
         public System.Drawing.Image CaptureWindow(IntPtr handle)
         {
             IntPtr hdcSrc = User32.GetWindowDC(handle);
@@ -95,22 +82,14 @@ namespace HoppoPlugin
             GDI32.DeleteObject(hBitmap);
             return img;
         }
-        /// <summary>  
-        /// 指定窗口截图 保存为图片文件  
-        /// </summary>  
-        /// <param name="handle"></param>  
-        /// <param name="filename"></param>  
-        /// <param name="format"></param>  
-        public int[] CaptureWindowToFile(IntPtr handle) ////////////////////////////////////////////////
+
+
+        public int[] GetHisogram(IntPtr handle)
         {
             System.Drawing.Image img = CaptureWindow(handle);
-            //img.Save(filename, format);
             return GetHisogram((Bitmap)img);
         }
 
-        /// <summary>  
-        /// 辅助类 定义 Gdi32 API 函数  
-        /// </summary>  
         private class GDI32
         {
 
@@ -132,9 +111,6 @@ namespace HoppoPlugin
             public static extern IntPtr SelectObject(IntPtr hDC, IntPtr hObject);
         }
 
-        /// <summary>  
-        /// 辅助类 定义User32 API函数  
-        /// </summary>  
         private class User32
         {
             [StructLayout(LayoutKind.Sequential)]
@@ -154,8 +130,6 @@ namespace HoppoPlugin
             [DllImport("user32.dll")]
             public static extern IntPtr GetWindowRect(IntPtr hWnd, ref RECT rect);
         }
-
-        //private System.Timers.Timer timer = new System.Timers.Timer(30000);
 
         #endregion
 
@@ -186,11 +160,6 @@ namespace HoppoPlugin
             HWND = IntPtr.Zero;
         }
 
-        //uint MAKELONG(ushort x, ushort y)
-        //{
-        //    return ((((uint)x) << 16) | y); 
-        //}
-
         Bitmap b = new Bitmap(UniversalConstants.CurrentDirectory + @"\HoppoPlugin\nekoError.png");
 
         void timer_Tick(object sender, EventArgs e)
@@ -198,7 +167,7 @@ namespace HoppoPlugin
             if (isEnabled)
             {
                 
-                int[] i = CaptureWindowToFile(HWND);
+                int[] i = GetHisogram(HWND);
                 int[] n = GetHisogram(b);
                 float f = GetResult(i, n);
                 if (f >= 0.55)

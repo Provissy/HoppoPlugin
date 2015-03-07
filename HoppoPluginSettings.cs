@@ -18,6 +18,11 @@ namespace HoppoPlugin
 
     public class HoppoPluginSettings : NotificationObject
     {
+        public static readonly string KCVSettingsPath = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            "grabacr.net",
+            "KanColleViewer\\");
+
         public static readonly string HPSettingsPath = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
             "grabacr.net",
@@ -59,8 +64,8 @@ namespace HoppoPlugin
         {
             try
             {
-                StreamWriter s = new StreamWriter(HoppoPluginSettings.UsageRecordPath);
-                s.WriteLine("5.0");
+                StreamWriter s = new StreamWriter(UsageRecordPath);
+                s.WriteLine("6.0");
                 s.Close();
             }
             catch (Exception ex)
@@ -72,7 +77,6 @@ namespace HoppoPlugin
             (Process.GetProcessesByName("KanColleViewer")[0]).Kill();
         }
 
-        // Settings detail.
 
         #region EnableSoundNotify 変更通知プロパティ
 
@@ -144,6 +148,25 @@ namespace HoppoPlugin
                 if (this._EnableNotifyIcon != value)
                 {
                     this._EnableNotifyIcon = value;
+                    this.RaisePropertyChanged();
+                }
+            }
+        }
+
+        #endregion
+
+        #region EnableNAS 変更通知プロパティ
+
+        private bool _EnableNAS = true;
+
+        public bool EnableNAS
+        {
+            get { return this._EnableNAS; }
+            set
+            {
+                if (this._EnableNAS != value)
+                {
+                    this._EnableNAS = value;
                     this.RaisePropertyChanged();
                 }
             }

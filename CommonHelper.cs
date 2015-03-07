@@ -15,10 +15,11 @@ namespace HoppoPlugin
             {
                 var req = WebRequest.Create("http://120.24.165.103/HPVersionChecker.php");
                 req.Method = "GET";
-                req.Timeout = 2000;
+                req.Timeout = 3000;
                 var rsp = req.GetResponse();
                 StreamReader sr = new StreamReader(rsp.GetResponseStream());
                 string version = sr.ReadLine();
+                sr.Close();
 
                 if(version == "SERVICE_STOPPED")
                 {

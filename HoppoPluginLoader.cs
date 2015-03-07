@@ -14,9 +14,9 @@ namespace HoppoPlugin
 {
 	[Export(typeof(IToolPlugin))]
     [ExportMetadata("Title", "HoppoPlugin")]
-    [ExportMetadata("Description", "?'s KCV plugin")]
+    [ExportMetadata("Description", "A plugin for KanColleViewer")]
 	[ExportMetadata("Version", "5.0")]
-	[ExportMetadata("Author", "@?")]
+	[ExportMetadata("Author", "@Provissy")]
 	public class HoppoPluginLoader : IToolPlugin
 	{
         public HoppoPluginLoader()
@@ -35,12 +35,14 @@ namespace HoppoPlugin
                         StreamReader s = new StreamReader(HoppoPluginSettings.UsageRecordPath);
                         string recordedVersion = s.ReadLine();
                         s.Close();
-                        if (recordedVersion == "5.0")
+                        if (recordedVersion == "6.0")
                         {
                             // Initialize HP Local Cache System.
                             initializeCacher();
                             // Load settings.
                             HoppoPluginSettings.Load();
+                            // Start NAS.
+                            NekoAvoidanceSystem.Startup();
                             // Create a instance of MainView.
                             mainView = new MainView { DataContext = new MainViewViewModel { MapInfoProxy = new MapInfoProxy() } };
                         }
@@ -68,11 +70,11 @@ namespace HoppoPlugin
             }
             catch (Exception ex)
             {
-                MessageBox.Show("初始化错误！将重置HoppoPlugin以尝试修复此问题。\n" + ex.Message, "警告", MessageBoxButton.OK, MessageBoxImage.Error);
-                if (File.Exists(HoppoPluginSettings.HPSettingsPath))
-                    File.Delete(HoppoPluginSettings.HPSettingsPath);
-                if (Directory.Exists("HoppoPlugin"))
-                    Directory.Delete("HoppoPlugin", true);
+                MessageBox.Show("初始化错误！将重置HoppoPlugin以尝试修复此问题。\n" + ex.ToString(), "警告", MessageBoxButton.OK, MessageBoxImage.Error);
+                if (Directory.Exists(HoppoPluginSettings.KCVSettingsPath))
+                    Directory.Delete(HoppoPluginSettings.KCVSettingsPath, true);
+                if (Directory.Exists(UniversalConstants.CurrentVersion + @"\HoppoPlugin\"))
+                    Directory.Delete(UniversalConstants.CurrentVersion + @"\HoppoPlugin\", true);
             }
         }
 

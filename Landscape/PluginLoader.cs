@@ -1,5 +1,7 @@
 ﻿using Grabacr07.KanColleViewer.Composition;
 using System.ComponentModel.Composition;
+using Grabacr07.KanColleViewer;
+using System.Windows;
 
 namespace HoppoPlugin.Landscape
 {
@@ -14,6 +16,11 @@ namespace HoppoPlugin.Landscape
 
         public PluginLoader()
         {
+            if (App.ProductInfo.Version.Major > 3)
+                return;
+            if (App.ProductInfo.Version.Minor > 5)
+                return;
+
             if(!hasInitialized)
             {
                 hasInitialized = true;

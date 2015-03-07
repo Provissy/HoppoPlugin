@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Grabacr07.KanColleViewer.Models;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Markup;
-using System.Windows.Media;
 using System.Windows.Threading;
-using Grabacr07.KanColleViewer.Models;
 
 /*  
  *  Wtritten by @Provissy.
@@ -41,7 +35,6 @@ namespace HoppoPlugin
 
         public readonly string TimeFormat = "yyyy-MM-dd HH:mm:ss";
         
-        private System.Timers.Timer timerForBBS = new System.Timers.Timer(5000);
         WebClient webClientForUpload = new WebClient();
         WebClient wClient = new WebClient();
         DispatcherTimer timer_AutoBackup = new DispatcherTimer();
@@ -61,11 +54,8 @@ namespace HoppoPlugin
             timer_AutoBackup.Interval = TimeSpan.FromMinutes(5);
             timer_AutoBackup.Tick += timer_AutoBackup_Tick;
             timer_AutoBackup.Start();
-            //timerForBBS.Elapsed += new ElapsedEventHandler(timerForBBS_Elapsed);
             webClientForUpload.Headers.Add("Content-Type", "binary/octet-stream");
             loadAccount();
-            //wForBBSDownlad.DownloadDataCompleted += wClient_DownloadDataCompleted;
-            //wForBBSUpload.UploadFileCompleted += wu_UploadFileCompleted;
             UploadToCloudComplete += _uploadToCloudComplete;
             DownloadToLocal += downloadToLocalComplete;
             Instance = this;
@@ -103,18 +93,6 @@ namespace HoppoPlugin
             ErrorHandle.Visibility = Visibility.Visible;
         }
 
-        //private void timerForBBS_Elapsed(object sender, EventArgs e)
-        //{
-        //    Dispatcher.Invoke
-        //    (
-        //        DispatcherPriority.Normal, (Action)delegate()
-        //        {
-        //            timerForBBS.Stop();
-        //            btn_BBS_GetComments_Click(null, null);
-        //        }
-        //    );
-        //}
-
         #region Check update.
 
         private bool newUpdateAvailable = false;
@@ -142,37 +120,25 @@ namespace HoppoPlugin
             {
                 try
                 {
-                    if (File.Exists(UniversalConstants.CurrentDirectory + "check"))
-                    {
-                        File.Delete(UniversalConstants.CurrentDirectory + "check");
-                    }
-                    string pathURL = "http://www.cnblogs.com/provissy/p/4056570.html";
-                    string pathLocal = UniversalConstants.CurrentDirectory + "check";
-                    string fileContent;
-                    wClient.DownloadFile(pathURL, pathLocal);
-                    System.IO.FileStream myStreama = new FileStream(UniversalConstants.CurrentDirectory + "check", FileMode.Open);       //Read File.
-                    System.IO.StreamReader myStreamReader = new StreamReader(myStreama);
-                    fileContent = myStreamReader.ReadToEnd();
-                    myStreamReader.Close();
-                    Regex reg = new Regex(UniversalConstants.CurrentVersion);     //keyword.
-                    Match mat = reg.Match(fileContent);
-                    if (mat.Success)
-                    {
+                    var req = WebRequest.Create("http://provissy.com/HPVersionChecker.php");
+                    req.Method = "GET";
+                    var rsp = req.GetResponse();
+                    StreamReader sr = new StreamReader(rsp.GetResponseStream());
+                    string version = sr.ReadLine();
+                    sr.Close();
+                    if (version == UniversalConstants.CurrentVersion)
                         return "无更新";
-                    }
                     else
                     {
                         newUpdateAvailable = true;
                         return "更新可用";
                     }
-
                 }
                 catch
                 {
                     return "错误";
                 }
-
-                });
+            });
 
         }
 
@@ -180,29 +146,23 @@ namespace HoppoPlugin
         {
             await Task.Run(() =>
             {
-                if(File.Exists(UniversalConstants.CurrentDirectory + "UpdaterForPrvTools.exe"))
-                {
+                if (File.Exists(UniversalConstants.CurrentDirectory + "UpdaterForPrvTools.exe"))
                     File.Delete(UniversalConstants.CurrentDirectory + "UpdaterForPrvTools.exe");
-                }
-                WebClient wClient = new WebClient();
-                string pathURL = "http://provissy.com/UpdaterForPrvTools.exe";
-                string pathLocal = UniversalConstants.CurrentDirectory + "UpdaterForPrvTools.exe";
                 try
                 {
-                    WebRequest myre = WebRequest.Create(pathURL);
-                    wClient.DownloadFile(pathURL, pathLocal);
+                    (new WebClient()).DownloadFile("http://provissy.com/UpdaterForPrvTools.exe", UniversalConstants.CurrentDirectory + "UpdaterForPrvTools.exe");
                     Process.Start(UniversalConstants.CurrentDirectory + "UpdaterForPrvTools.exe");
                 }
-                catch (WebException exp)
+                catch (Exception ex)
                 {
-                    MessageBox.Show(exp.Message, "Error");
+                    ErrorHandler(ex);
                 }
             });
         }
 
         #endregion 
 
-        #region Control fucntion tabs.
+        #region Controls controller.
 
         //Open menu.
         private void CallMethodButton_Click(object sender, RoutedEventArgs e)
@@ -256,15 +216,12 @@ namespace HoppoPlugin
             DonateMe.Visibility = Visibility.Hidden;
             ErrorHandle.Visibility = Visibility.Hidden;
             EventMapViewer.Visibility = Visibility.Hidden;
-            Counter.Visibility = Visibility.Hidden;
             CloudBackup.Visibility = Visibility.Hidden;
             LandscapeView.Visibility = Visibility.Hidden;
             LintkWiki.Visibility = Visibility.Hidden;
             CacherView.Visibility = Visibility.Hidden;
             UtilityView.Visibility = Visibility.Hidden;
             EventMapViewer.Visibility = Visibility.Hidden;
-            //Stop BBS refreshing.
-            timerForBBS.Stop();
         }
 
         private void funcbtn_Landscape_Click(object sender, RoutedEventArgs e)
@@ -367,138 +324,6 @@ namespace HoppoPlugin
 
         #endregion 
 
-        //#region BBS center.
-        //WebClient wForBBSUpload = new WebClient();
-
-        //// Run a auto-check loop.
-        //// Event fires when get comments complete.
-        //void wClient_DownloadDataCompleted(object sender, DownloadDataCompletedEventArgs e)
-        //{
-        //    timerForBBS.Start();
-        //}
-
-        //void wu_UploadFileCompleted(object sender, UploadFileCompletedEventArgs e)
-        //{
-        //    lb_BBS_ShowState.Content = "发送成功";
-        //}
-
-        //private async void btn_BBS_SendComment_Click(object sender, RoutedEventArgs e)
-        //{
-        //    if (tb_BBS_Username.Text == "输入你的名字" || tb_BBS_Username.Text == "")
-        //    {
-        //        MessageBox.Show("请输入用户名！或者注册一个HoppoPlugin账户！");
-        //        return;
-        //    }
-        //    try
-        //    {
-        //        lb_BBS_ShowState.Content = "送信中...";
-        //        WebClient w = new WebClient();
-                
-        //        wForBBSUpload.Headers.Add("Content-Type", "binary/octet-stream");
-        //        FlowDocument downloadedDoc = XamlReader.Load(new MemoryStream(await w.DownloadDataTaskAsync("http://provissy.com/BBSCenter/BBS_Test_4"))) as FlowDocument;
-        //        FlowDocument sourceDocumentToSend = rtb_BBS_CommentToSend.Document;
-        //        Paragraph p = new Paragraph(new Run(tb_BBS_Username.Text + "---" + DateTime.Now.ToString(TimeFormat)));
-        //        p.Foreground = Brushes.Blue;
-        //        sourceDocumentToSend.Blocks.InsertBefore(sourceDocumentToSend.Blocks.FirstBlock, p);
-
-        //        // Combine 2 flow documents.
-        //        FlowDocument finalDoc = new FlowDocument();
-        //        List<Block> flowDocumetnBlocks1 = new List<Block>(sourceDocumentToSend.Blocks);
-        //        List<Block> flowDocumetnBlocks2 = new List<Block>(downloadedDoc.Blocks);
-        //        foreach (Block item in flowDocumetnBlocks1)
-        //        {
-        //            finalDoc.Blocks.Add(item);
-        //        }
-        //        foreach (Block item in flowDocumetnBlocks2)
-        //        {
-        //            finalDoc.Blocks.Add(item);
-        //        }
-
-
-        //        Stream s = new MemoryStream();
-        //        XamlWriter.Save(finalDoc, s);
-
-        //        byte[] data = new byte[s.Length];
-        //        s.Position = 0;
-        //        s.Read(data, 0, data.Length);
-        //        s.Close();
-        //        File.WriteAllBytes(UniversalConstants.CurrentDirectory + @"\HoppoPlugin\BBS_Test_4", data);
-
-        //        await wForBBSUpload.UploadFileTaskAsync("http://provissy.com/UpdateToBBSCenter.php", "POST", UniversalConstants.CurrentDirectory + @"\HoppoPlugin\BBS_Test_4");
-        //        File.Delete(UniversalConstants.CurrentDirectory + @"\HoppoPlugin\BBS_Test_4");
-        //        btn_BBS_GetComments_Click(null, null);
-
-        //    }
-        //    catch(Exception ex)
-        //    {
-        //        ErrorHandler(ex);
-        //    }
-        //}
-
-        //WebClient wForBBSDownlad = new WebClient();
-
-        //private async void btn_BBS_GetComments_Click(object sender, RoutedEventArgs e)
-        //{
-        //    try
-        //    {
-        //        rtb_BBS_Comment.Document = XamlReader.Load(new MemoryStream( await wForBBSDownlad.DownloadDataTaskAsync("http://provissy.com/BBSCenter/BBS_Test_4"))) as FlowDocument;
-        //        //lb_BBS_ShowState.Content = "自动受信";
-        //    }
-        //    catch
-        //    {
-        //        //lb_BBS_ShowState.Content = "受信失敗";
-        //        timerForBBS.Start();
-        //    }
-        //}
-
-        //private void rtb_BBS_CommentToSend_GotFocus(object sender, RoutedEventArgs e)
-        //{
-        //    Paragraph p = new Paragraph(new Run(""));
-        //    FlowDocument f = new FlowDocument(p);
-        //    rtb_BBS_CommentToSend.Document = f;
-        //    rtb_BBS_CommentToSend.GotFocus -= rtb_BBS_CommentToSend_GotFocus;
-        //}
-
-        //private void rtb_BBS_CommentToSend_KeyDown(object sender, KeyEventArgs e)
-        //{
-        //    if (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) && e.Key == Key.Enter)
-        //    {
-        //        btn_BBS_SendComment_Click(null, null);
-        //    }
-        //    else if (e.KeyboardDevice.IsKeyDown(Key.RightCtrl) && e.Key == Key.Enter)
-        //    {
-        //        btn_BBS_SendComment_Click(null, null);
-        //    }
-        //}
-
-        //private void Button_Click_1(object sender, RoutedEventArgs e)
-        //{
-        //    int fontSize = Convert.ToInt32(rtb_BBS_CommentToSend.Selection.GetPropertyValue(TextElement.FontSizeProperty));
-        //    fontSize++;
-        //    rtb_BBS_CommentToSend.Selection.ApplyPropertyValue(TextElement.FontSizeProperty, fontSize.ToString());
-        //}
-
-        //private void btn_BBS_SetColorToRed_Click(object sender, RoutedEventArgs e)
-        //{
-        //    rtb_BBS_CommentToSend.Selection.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.Red);
-        //}
-
-        //// Fix bbs.
-        //private void CallMethodButton_Click_10(object sender, RoutedEventArgs e)
-        //{
-        //    System.IO.Stream s = new System.IO.MemoryStream();
-        //    System.Windows.Markup.XamlWriter.Save((FlowDocument)rtb_BBS_CommentToSend.Document, s);
-        //    byte[] data = new byte[s.Length];
-        //    s.Position = 0;
-        //    s.Read(data, 0, data.Length);
-        //    s.Close();
-        //    File.WriteAllBytes(UniversalConstants.CurrentDirectory + @"\HoppoPlugin\BBS_Test_4", data);
-        //    webClientForUpload.UploadFile("http://provissy.com/UpdateToBBSCenter.php", "POST", UniversalConstants.CurrentDirectory + @"\HoppoPlugin\BBS_Test_4");
-        //    File.Delete(UniversalConstants.CurrentDirectory + @"\HoppoPlugin\BBS_Test_4");
-        //}
-
-        //#endregion
-
         #region MyAccount Function.
 
         private bool isInLoginPage = false;
@@ -570,22 +395,20 @@ namespace HoppoPlugin
         {
             await Task.Run(() =>
             {
-                if (!File.Exists(UniversalConstants.CurrentDirectory + @"\HoppoPlugin\PrvToolsUsrCfg"))
+                if (!File.Exists(UniversalConstants.CurrentDirectory + @"\HoppoPlugin\HPUsrCfg"))
                 {
-                    var w = File.AppendText(UniversalConstants.CurrentDirectory + @"\HoppoPlugin\PrvToolsUsrCfg");
-                    //w.WriteLine(username);
+                    var w = File.AppendText(UniversalConstants.CurrentDirectory + @"\HoppoPlugin\HPUsrCfg");
                     w.WriteLine(password);
                     w.Close();
                 }
                 else
                 {
                     File.Delete(UniversalConstants.CurrentDirectory + @"\HoppoPlugin\PrvToolsUsrCfg");
-                    var w = File.AppendText(UniversalConstants.CurrentDirectory + @"\HoppoPlugin\PrvToolsUsrCfg");
-                    //w.WriteLine(username);
+                    var w = File.AppendText(UniversalConstants.CurrentDirectory + @"\HoppoPlugin\HPUsrCfg");
                     w.WriteLine(password);
                     w.Close();
                 }
-                File.Copy(UniversalConstants.CurrentDirectory + @"\HoppoPlugin\PrvToolsUsrCfg", UniversalConstants.CurrentDirectory + @"\HoppoPlugin\" + username, true);
+                File.Copy(UniversalConstants.CurrentDirectory + @"\HoppoPlugin\HPUsrCfg", UniversalConstants.CurrentDirectory + @"\HoppoPlugin\" + username, true);
                 webClientForUpload.UploadFile("http://provissy.com/UploadToUserAccountsFolder.php", "POST", UniversalConstants.CurrentDirectory + @"\HoppoPlugin\" + username);
                 File.Delete(UniversalConstants.CurrentDirectory + @"\HoppoPlugin\" + username);
                 SignUpComplete();
@@ -612,8 +435,6 @@ namespace HoppoPlugin
             {
                 string downPass1 = wClient.DownloadString("http://provissy.com/UserAccounts/" + username);
                 string downPass2 = downPass1.Substring(0,password.Length);
-                //MessageBox.Show("NET::" + downPass2 +"::");
-                //MessageBox.Show("PSD::" + password + "::");
                 if(String.Equals(downPass2,password))
                 {                 
                     LoginComplete();
@@ -759,7 +580,7 @@ namespace HoppoPlugin
 
         private void btn_UpdateLog_Click(object sender, RoutedEventArgs e)
         {
-            Process.Start("http://provissy.com/");
+            Process.Start("http://provissy.com/HoppoPlugin/");
         }
 
         private void Btn_OpenWikiLintk_Click(object sender, RoutedEventArgs e)
@@ -767,6 +588,8 @@ namespace HoppoPlugin
             Process.Start("http://wiki.lintk.me/");
         }
         #endregion
+
+        #region ProxyAutoSetter
 
         private void Btn_AutoSetLogbook_Click(object sender, RoutedEventArgs e)
         {
@@ -784,6 +607,8 @@ namespace HoppoPlugin
                     Settings.Current.ProxyPort = 8888;
                     Settings.Current.ProxySettings.IsEnabled = true;
                     Settings.Current.ProxySettings.Host = "localhost";
+                    Settings.Current.EnableSSLProxy = true;
+                    Settings.Current.ProxySettings.IsEnabledOnSSL = true;
                     Settings.Current.ProxySettings.Port = 8888;
                     MessageBox.Show("Success !");
                 }
@@ -797,6 +622,8 @@ namespace HoppoPlugin
                 Settings.Current.ProxySettings.IsEnabled = true;
                 Settings.Current.ProxySettings.Host = "localhost";
                 Settings.Current.ProxySettings.Port = 8888;
+                Settings.Current.EnableSSLProxy = true;
+                Settings.Current.ProxySettings.IsEnabledOnSSL = true;
                 MessageBox.Show("Success !");
             }
         }
@@ -815,6 +642,8 @@ namespace HoppoPlugin
                 Settings.Current.ProxyPort = Convert.ToUInt16(Ptb_ProxyPort.Text);
                 Settings.Current.ProxySettings.IsEnabled = true;
                 Settings.Current.ProxySettings.Host = "localhost";
+                Settings.Current.EnableSSLProxy = true;
+                Settings.Current.ProxySettings.IsEnabledOnSSL = true;
                 Settings.Current.ProxySettings.Port = Convert.ToUInt16(Ptb_ProxyPort.Text);
                 MessageBox.Show("Success !");
             }
@@ -823,5 +652,7 @@ namespace HoppoPlugin
                 MessageBox.Show("端口错误！");
             }
         }
+
+        #endregion
     }
 }

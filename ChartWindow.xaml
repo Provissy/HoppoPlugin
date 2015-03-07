@@ -25,7 +25,7 @@
         
     </Window.Resources>
     <Grid>
-        <chartingToolkit:Chart  Name="LineChart1" Margin="0,0,0,-22">      
+        <chartingToolkit:Chart  Name="LineChart1" Margin="0,0,0,-60" Title="资源统计图">      
             <chartingToolkit:LineSeries Name="Fuel"
                                                 Title="燃油"  
                                                 DependentValuePath="countOfMat" 

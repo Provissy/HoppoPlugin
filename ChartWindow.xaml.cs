@@ -19,7 +19,7 @@ using System.Windows.Threading;
 namespace HoppoPlugin
 {
     /// <summary>
-    /// Interaction logic for Window2.xaml
+    /// Interaction logic for ChartWindow.xaml
     /// </summary>
     public partial class ChartWindow : Window
     {
@@ -40,28 +40,32 @@ namespace HoppoPlugin
             catch (Exception ex)
             {
                 MessageBox.Show("加载统计图错误！ " + ex.ToString());
-                //MainView m = new MainView();
-                //m.ErrorHandler("加载统计图错误！ " + ex.ToString());
             }
         }
 
-
-
         private void loadMatChart()
         {
-            Action a = new Action(() => {
-                List<string[]> loadedList = ReadCSV(UniversalConstants.CurrentDirectory + "MaterialsLog.csv");
+            List<string[]> loadedList = ReadCSV(UniversalConstants.CurrentDirectory + "MaterialsLog.csv");
+
+            List<MatData> fuelData = loadFuel(loadedList);
+            List<MatData> ammoData = loadFuel(loadedList);
+            List<MatData> steelData = loadFuel(loadedList);
+            List<MatData> bauxiteData = loadFuel(loadedList);
+
+            this.Dispatcher.Invoke(new Action(() =>
+            {
                 LineSeries fuelLine = LineChart1.Series[0] as LineSeries;
-                fuelLine.ItemsSource = loadFuel(loadedList);
+                fuelLine.ItemsSource = fuelData;
                 LineSeries ammoLine = LineChart1.Series[1] as LineSeries;
-                ammoLine.ItemsSource = loadAmmo(loadedList);
+                ammoLine.ItemsSource = ammoData;
                 LineSeries steelLine = LineChart1.Series[2] as LineSeries;
-                steelLine.ItemsSource = loadSteel(loadedList);
+                steelLine.ItemsSource = steelData;
                 LineSeries bauxiteLine = LineChart1.Series[3] as LineSeries;
-                bauxiteLine.ItemsSource = loadBauxite(loadedList);
-            LineChart1.Title = "资源统计图";
-            });
-            this.Dispatcher.Invoke(a, DispatcherPriority.ApplicationIdle);
+                bauxiteLine.ItemsSource = bauxiteData;
+                LineChart1.Title = "资源统计图";
+            }));
+
+            
         }
 
         private List<MatData> loadBauxite(List<string[]> loadMat)
@@ -69,7 +73,6 @@ namespace HoppoPlugin
             List<MatData> matdata = new List<MatData>();
             int lenth = loadMat.Count;
             int quarter = lenth / 4;
-            //foreach (string[] ss in loadMat)
             for (int i = 0; i < loadMat.Count; i++)
             {
                 if (i == 0)
@@ -85,14 +88,6 @@ namespace HoppoPlugin
                     else
                     {
                         matdata.Add(new MatData(loadMat[i][0], Int32.Parse(loadMat[i][4])));
-                        //if(ssCount%2 == 0)
-                        //{
-                        //    matdata.Add(new MatData(" ", Int32.Parse(ss[3])));
-                        //}
-                        //else
-                        //{
-                        //    matdata.Add(new MatData("　", Int32.Parse(ss[3])));
-                        //}  
                     }
                 }
             }
@@ -104,7 +99,6 @@ namespace HoppoPlugin
             List<MatData> matdata = new List<MatData>();
             int lenth = loadMat.Count;
             int quarter = lenth / 4;
-            //foreach (string[] ss in loadMat)
             for (int i = 0; i < loadMat.Count; i++ )
             {
                 if (i == 0)
@@ -120,14 +114,6 @@ namespace HoppoPlugin
                     else
                     {
                         matdata.Add(new MatData(loadMat[i][0], Int32.Parse(loadMat[i][3])));
-                        //if(ssCount%2 == 0)
-                        //{
-                        //    matdata.Add(new MatData(" ", Int32.Parse(ss[3])));
-                        //}
-                        //else
-                        //{
-                        //    matdata.Add(new MatData("　", Int32.Parse(ss[3])));
-                        //}  
                     }
                 }
             }
@@ -139,7 +125,6 @@ namespace HoppoPlugin
             List<MatData> matdata = new List<MatData>();
             int lenth = loadMat.Count;
             int quarter = lenth / 4;
-            //foreach (string[] ss in loadMat)
             for (int i = 0; i < loadMat.Count; i++)
             {
                 if (i == 0)
@@ -155,14 +140,6 @@ namespace HoppoPlugin
                     else
                     {
                         matdata.Add(new MatData(loadMat[i][0], Int32.Parse(loadMat[i][2])));
-                        //if(ssCount%2 == 0)
-                        //{
-                        //    matdata.Add(new MatData(" ", Int32.Parse(ss[3])));
-                        //}
-                        //else
-                        //{
-                        //    matdata.Add(new MatData("　", Int32.Parse(ss[3])));
-                        //}  
                     }
                 }
             }
@@ -174,7 +151,6 @@ namespace HoppoPlugin
             List<MatData> matdata = new List<MatData>();
             int lenth = loadMat.Count;
             int quarter = lenth / 4;
-            //foreach (string[] ss in loadMat)
             for (int i = 0; i < loadMat.Count; i++)
             {
                 if (i == 0)
@@ -190,28 +166,12 @@ namespace HoppoPlugin
                     else
                     {
                         matdata.Add(new MatData(loadMat[i][0], Int32.Parse(loadMat[i][1])));
-                        //if(ssCount%2 == 0)
-                        //{
-                        //    matdata.Add(new MatData(" ", Int32.Parse(ss[3])));
-                        //}
-                        //else
-                        //{
-                        //    matdata.Add(new MatData("　", Int32.Parse(ss[3])));
-                        //}  
                     }
                 }
             }
             return matdata;
         }
 
-
-
-        /// <summary>
-        /// CSV File Reader.
-        /// Read a csv file to List<string[]> .
-        /// </summary>
-        /// <param name="filePathName"></param>
-        /// <returns></returns>
         public static List<String[]> ReadCSV(string filePathName )
         {
             List<String[]> ls = new List<String[]>();
@@ -224,7 +184,6 @@ namespace HoppoPlugin
                 if (strLine != null && strLine.Length > 0)
                 {
                     ls.Add(strLine.Split(','));
-                    //Debug.WriteLine(strLine);
                 }
             }
             fileReader.Close();
@@ -246,17 +205,4 @@ namespace HoppoPlugin
             countOfMat = countofmat;
         }
     }
-
-    //public class LineSeriesEx : LineSeries
-    //{
-    //    protected override DataPoint CreateDataPoint()
-    //    {
-    //        return new EmptyDataPoint();
-    //    }
-    //}
-
-    //public class EmptyDataPoint : DataPoint
-    //{
-    //    // As the method name says, this DataPoint is empty.
-    //}
 }

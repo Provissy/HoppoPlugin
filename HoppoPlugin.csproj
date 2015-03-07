@@ -141,10 +141,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BattleWatcher.cs" />
     <Compile Include="Cacher\CacheCore.cs" />
     <Compile Include="CommonHelper.cs" />
-    <Compile Include="Counter.cs" />
     <Compile Include="Cacher\FiddlerRules.cs" />
     <Compile Include="Landscape\KCVUIHelper.cs" />
     <Compile Include="Landscape\LandscapeExtensionButton.xaml.cs" />
@@ -155,14 +153,17 @@
     <Compile Include="Landscape\MainContentWindow.xaml.cs" />
     <Compile Include="Landscape\PluginLoader.cs" />
     <Compile Include="Landscape\PluginSettings.cs" />
-    <Compile Include="LoSCal\CalcExtension.cs" />
-    <Compile Include="LoSCal\FleetToViewRangeConverter.cs" />
-    <Compile Include="LoSCal\KanColleWrapperHelper.cs" />
-    <Compile Include="LoSCal\KCVUIHelper.cs" />
-    <Compile Include="LoSCal\PluginLoader.cs" />
-    <Compile Include="LoSCal\PluginSettings.cs" />
-    <Compile Include="LoSCal\ViewRangeSelector.xaml.cs" />
-    <Compile Include="LoSCal\ViewRangeSelectorViewModel.cs" />
+    <Compile Include="LosCal\CalcExtension.cs" />
+    <Compile Include="LosCal\FleetToViewRangeConverter.cs" />
+    <Compile Include="LosCal\KanColleWrapperHelper.cs" />
+    <Compile Include="LosCal\KCVUIHelper.cs" />
+    <Compile Include="LosCal\PluginLoader.cs" />
+    <Compile Include="LosCal\PluginSettings.cs" />
+    <Compile Include="LosCal\ViewRangeSelector.xaml.cs" />
+    <Compile Include="LosCal\ViewRangeSelectorViewModel.cs" />
+    <Compile Include="MapHelper\MapInfo.cs" />
+    <Compile Include="MapHelper\MapInfoProxy.cs" />
+    <Compile Include="NekoAvoidanceSystem.cs" />
     <Compile Include="NekoDetector\GameWatcher.cs" />
     <Compile Include="Cacher\GMTHelper.cs" />
     <Compile Include="Cacher\GraphList.cs" />
@@ -171,8 +172,6 @@
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainViewViewModel.cs" />
-    <Compile Include="LoSCal\MapHelper\MapInfo.cs" />
-    <Compile Include="LoSCal\MapHelper\MapInfoProxy.cs" />
     <Compile Include="HoppoPluginLoader.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -253,7 +252,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="LoSCal\ViewRangeSelector.xaml">
+    <Page Include="LosCal\ViewRangeSelector.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

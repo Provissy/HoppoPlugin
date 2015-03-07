@@ -49,12 +49,6 @@ namespace HoppoPlugin
             proxy.api_req_kousyou_destroyship.TryParse<kcsapi_destroyship>().Subscribe(x => this.MaterialsHistory(x.Data.api_material));
         }
 
-        //private void MapStart(kcsapi_map_start k)
-        //{
-        //    System.Windows.MessageBox.Show(k.api_rashin_flg.ToString());
-        //    System.Windows.MessageBox.Show(k.api_rashin_id.ToString());
-        //}
-
         private void CreateItem(kcsapi_createitem item, NameValueCollection req)
         {
             Log(LogType.BuildItem, "{0},{1},{2},{3},{4},{5},{6}",
@@ -159,7 +153,6 @@ namespace HoppoPlugin
         {
             try
             {
-                //string mainFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
                 string mainFolder = UniversalConstants.CurrentDirectory;
 
 

@@ -121,7 +121,10 @@ namespace HoppoPlugin
             {
                 MessageBox.Show("没有对应的记录！");
             }
-            catch { }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
         }
 
         private void Window_CR(object sender, EventArgs e)
