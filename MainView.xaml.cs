@@ -11,7 +11,7 @@ using System.Windows.Threading;
 
 /*  
  *  Wtritten by @Provissy.
- *  Please use the code under the MIT License.
+ *  Please use the code under the GPL v3 License.
  */
 
 namespace HoppoPlugin
