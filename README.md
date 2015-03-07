@@ -6,6 +6,8 @@ It's easy to use.
 Functions
 ----------
 
+A Neko Avoidance System for free.
+
 Experience calculator.
 
 View HP of event map.
@@ -52,12 +54,10 @@ The GPL v3 License.
 
 ![image](http://www.gnu.org/graphics/gplv3-127x51.png)
 
-Issues
+Known Issues
 ----------
 
 * Multi language support.
-* Compatibility with other plugins.
-* Compatibility with KanColleViewer 3.6+.
 * Materials chart.
 * Login/register system.
 * Code too dirty.
