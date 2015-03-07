@@ -45,7 +45,7 @@ Throw the dll to "Plugins" folder under KanColleViewer's root path.
 Screenshot
 ----------
 
-![image](http://provissy.com/wp-content/uploads/2015/02/SS_HP.png)
+![image](http://provissy.com/HP_6.0.png)
 
 License
 ----------
